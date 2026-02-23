@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4 Vocab Arena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .font-display {
+            font-family: 'Fredoka One', cursive;
+            letter-spacing: 1px;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Interactive Elements */
+        .game-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .game-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .game-btn:active {
+            transform: translateY(2px) scale(0.98);
+        }
+
+        .letter-tile {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            text-transform: uppercase;
+        }
+        
+        .letter-tile.empty {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,255,255,0.3);
+            cursor: default;
+        }
+
+        .letter-tile.filled {
+            background: linear-gradient(to bottom right, #f59e0b, #d97706);
+            color: #fff;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 4px 0 #b45309;
+        }
+        .letter-tile.filled:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #b45309;
+        }
+
+        /* Timer Bar */
+        .timer-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        .timer-bar {
+            height: 100%;
+            background: #10b981;
+            transition: width 1s linear, background-color 0.3s;
+        }
+        .timer-warning { background: #f59e0b; }
+        .timer-danger { background: #ef4444; }
+
+        /* Hide Views */
+        .view { display: none; }
+        .view.active { display: block; }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center justify-center">
+
+    <!-- Decorative Orbs -->
+    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 z-[-1]"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 z-[-1]"></div>
+
+    <div class="w-full max-w-4xl">
+        
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view active animate-pop-in">
+            <div class="text-center mb-12">
+                <span class="bg-indigo-600 text-indigo-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Unit 4 Edition</span>
+                <h1 class="text-5xl md:text-7xl mt-4 mb-4 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500 font-display drop-shadow-lg">Vocab Arena</h1>
+                <p class="text-xl text-indigo-200">Competition, Nature, & The Cold War</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Game 1 Card -->
+                <div class="glass rounded-3xl p-8 text-center flex flex-col justify-between border-t-4 border-t-emerald-400 game-btn">
+                    <div>
+                        <div class="text-6xl mb-4">⏱️</div>
+                        <h2 class="text-3xl text-emerald-300 mb-2 font-display">Speed Run</h2>
+                        <p class="text-slate-300 mb-6">Match definitions to the correct words as fast as you can. 60 seconds on the clock. Correct answers give bonus time!</p>
+                    </div>
+                    <button onclick="startGame('speedrun')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 rounded-xl text-xl shadow-[0_4px_0_#059669] active:shadow-[0_0px_0_#059669] active:translate-y-1 transition-all">Play Now</button>
+                </div>
+
+                <!-- Game 2 Card -->
+                <div class="glass rounded-3xl p-8 text-center flex flex-col justify-between border-t-4 border-t-purple-400 game-btn">
+                    <div>
+                        <div class="text-6xl mb-4">🧩</div>
+                        <h2 class="text-3xl text-purple-300 mb-2 font-display">Word Scrambler</h2>
+                        <p class="text-slate-300 mb-6">Read the definition and reconstruct the Unit 4 word from the scrambled letter tiles. Solve 5 words to win!</p>
+                    </div>
+                    <button onclick="startGame('scrambler')" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 rounded-xl text-xl shadow-[0_4px_0_#4f46e5] active:shadow-[0_0px_0_#4f46e5] active:translate-y-1 transition-all">Play Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPEED RUN VIEW -->
+        <div id="view-speedrun" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">
+                        ← Quit
+                    </button>
+                    <div class="text-2xl font-display text-amber-400" id="sr-score">Score: 0</div>
+                </div>
+
+                <!-- Timer -->
+                <div class="timer-bar-container">
+                    <div id="sr-timer-bar" class="timer-bar" style="width: 100%;"></div>
+                </div>
+                <div class="text-center text-sm font-bold text-slate-300 mb-8 tracking-widest uppercase">Time Left: <span id="sr-time-text" class="text-white">60</span>s</div>
+
+                <!-- Play Area -->
+                <div id="sr-play-area" class="animate-pop-in">
+                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-8 rounded-2xl mb-8 text-center shadow-inner">
+                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Definition</span>
+                        <h3 id="sr-definition" class="text-2xl md:text-3xl font-medium text-white leading-tight"></h3>
+                    </div>
+
+                    <div id="sr-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCRAMBLER VIEW -->
+        <div id="view-scrambler" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">
+                        ← Quit
+                    </button>
+                    <div class="text-xl font-display text-purple-400" id="sc-progress">Word 1 of 5</div>
+                </div>
+
+                <!-- Play Area -->
+                <div id="sc-play-area" class="animate-pop-in text-center flex flex-col items-center">
+                    
+                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-6 rounded-2xl w-full mb-10 shadow-inner">
+                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Decode this definition</span>
+                        <h3 id="sc-definition" class="text-xl md:text-2xl font-medium text-white leading-tight"></h3>
+                    </div>
+
+                    <!-- Target Word Slots -->
+                    <div class="mb-4 w-full">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-bold">Your Answer:</p>
+                        <div id="sc-target-slots" class="flex flex-wrap justify-center gap-2 mb-8 min-h-[3rem]">
+                            <!-- Empty slots injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Available Letters -->
+                    <div class="w-full bg-black/20 p-6 rounded-2xl border border-white/5">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-bold">Available Letters:</p>
+                        <div id="sc-letters-pool" class="flex flex-wrap justify-center gap-3">
+                            <!-- Letters injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex gap-4 mt-8 w-full justify-center">
+                        <button onclick="scramblerClear()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-xl transition">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS VIEW -->
+        <div id="view-results" class="view text-center">
+            <div class="glass rounded-3xl p-10 max-w-lg mx-auto animate-pop-in border-t-4 border-amber-400">
+                <div class="text-7xl mb-6">🏆</div>
+                <h2 class="text-4xl font-display text-white mb-2">Game Over!</h2>
+                <p id="results-message" class="text-lg text-slate-300 mb-8"></p>
+                
+                <div class="bg-black/30 rounded-2xl p-6 mb-8 border border-white/10">
+                    <span class="text-sm font-bold text-slate-400 uppercase tracking-widest block mb-1">Final Score</span>
+                    <span id="results-score" class="text-5xl font-display text-amber-400">0</span>
+                </div>
+
+                <button onclick="showView('dashboard')" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl text-lg shadow-[0_4px_0_#3730a3] active:shadow-[0_0px_0_#3730a3] active:translate-y-1 transition-all">Play Again</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AUDIO (Optional, using browser beeps to avoid external assets) -->
+    <script>
+        // --- VOCABULARY DATA ---
+        const vocabData = [
+            { word: "rivalry", def: "A state of intense competition between two people or groups." },
+            { word: "opponent", def: "Someone who competes against or fights another in a contest." },
+            { word: "outperform", def: "To perform better or do better than someone else." },
+            { word: "interspecies", def: "Competition or interaction occurring between DIFFERENT species." },
+            { word: "intraspecies", def: "Competition or interaction occurring within the SAME species." },
+            { word: "coexist", def: "To live in peace at the same time or in the same place." },
+            { word: "cooperate", def: "To work together towards a shared goal." },
+            { word: "emigrate", def: "To leave one's own area or country to settle permanently in another." },
+            { word: "invasive", def: "A species that spreads quickly and harms the new environment." },
+            { word: "adapt", def: "To change behavior or physical traits to survive in a new environment." },
+            { word: "extinction", def: "The state or process of a species dying out completely." },
+            { word: "anxiety", def: "A strong feeling of worry, nervousness, or unease under pressure." },
+            { word: "catalyst", def: "A person or thing that causes an event or change to happen quickly." },
+            { word: "transparent", def: "Open, honest, and easy to understand; without hidden secrets." },
+            { word: "secrecy", def: "The action of keeping things hidden from others." },
+            { word: "underperform", def: "To do worse than expected, often due to pressure." },
+            { word: "battleground", def: "A place where a fight, conflict, or competition happens." }
+        ];
+
+        // --- GLOBAL STATE ---
+        let currentGame = '';
+        let score = 0;
+
+        // Utility: Shuffle Array
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        // View Management
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            
+            // Stop timers if leaving a game
+            if (viewId === 'dashboard') {
+                clearInterval(srTimer);
+            }
+        }
+
+        function startGame(type) {
+            currentGame = type;
+            score = 0;
+            if (type === 'speedrun') initSpeedRun();
+            if (type === 'scrambler') initScrambler();
+        }
+
+        function endGame(message) {
+            clearInterval(srTimer);
+            document.getElementById('results-message').textContent = message;
+            document.getElementById('results-score').textContent = score;
+            showView('results');
+        }
+
+        // --- GAME 1: SPEED RUN LOGIC ---
+        let srTimeLeft = 60;
+        let srTimer;
+        let srCurrentWord = null;
+
+        function initSpeedRun() {
+            srTimeLeft = 60;
+            score = 0;
+            updateSrUI();
+            showView('speedrun');
+            nextSrQuestion();
+
+            clearInterval(srTimer);
+            srTimer = setInterval(() => {
+                srTimeLeft--;
+                updateSrUI();
+                if (srTimeLeft <= 0) {
+                    endGame("Time's up! Great effort.");
+                }
+            }, 1000);
+        }
+
+        function updateSrUI() {
+            document.getElementById('sr-score').textContent = `Score: ${score}`;
+            document.getElementById('sr-time-text').textContent = srTimeLeft;
+            
+            const bar = document.getElementById('sr-timer-bar');
+            const percent = (srTimeLeft / 60) * 100;
+            bar.style.width = `${percent}%`;
+            
+            // Color changes
+            bar.classList.remove('timer-warning', 'timer-danger');
+            if (srTimeLeft <= 20) bar.classList.add('timer-warning');
+            if (srTimeLeft <= 10) bar.classList.add('timer-danger');
+        }
+
+        function nextSrQuestion() {
+            // Re-animate play area
+            const playArea = document.getElementById('sr-play-area');
+            playArea.classList.remove('animate-pop-in');
+            void playArea.offsetWidth; // trigger reflow
+            playArea.classList.add('animate-pop-in');
+
+            // Pick 1 correct, 3 wrong
+            const shuffledVocab = shuffleArray([...vocabData]);
+            srCurrentWord = shuffledVocab[0];
+            const wrongWords = shuffledVocab.slice(1, 4);
+            
+            const options = shuffleArray([srCurrentWord, ...wrongWords]);
+
+            document.getElementById('sr-definition').textContent = srCurrentWord.def;
+            
+            const optionsContainer = document.getElementById('sr-options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white text-indigo-900 font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#cbd5e1] active:shadow-[0_0px_0_#cbd5e1] active:translate-y-1 transition-all capitalize hover:bg-indigo-50";
+                btn.textContent = opt.word;
+                btn.onclick = () => checkSrAnswer(opt.word, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkSrAnswer(selectedWord, btnElement) {
+            if (selectedWord === srCurrentWord.word) {
+                // Correct
+                score += 10;
+                srTimeLeft = Math.min(srTimeLeft + 2, 60); // Bonus time
+                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
+                btnElement.classList.add('bg-emerald-500', 'text-white', 'shadow-[0_4px_0_#059669]');
+                updateSrUI();
+                setTimeout(nextSrQuestion, 400);
+            } else {
+                // Wrong
+                score = Math.max(score - 5, 0); // Penalty
+                srTimeLeft = Math.max(srTimeLeft - 3, 0); // Time penalty
+                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
+                btnElement.classList.add('bg-red-500', 'text-white', 'shadow-[0_4px_0_#dc2626]', 'animate-shake');
+                updateSrUI();
+                
+                // Disable wrong button
+                btnElement.disabled = true;
+                btnElement.classList.add('opacity-50', 'cursor-not-allowed');
+                
+                if(srTimeLeft <= 0) endGame("Time's up! Watch out for penalties.");
+            }
+        }
+
+        // --- GAME 2: WORD SCRAMBLER LOGIC ---
+        let scWords = [];
+        let scCurrentIndex = 0;
+        let scTargetWord = '';
+        let scCurrentAttempt = [];
+        let scStartTime = 0;
+
+        function initScrambler() {
+            score = 0;
+            scCurrentIndex = 0;
+            // Pick 5 random words for a round
+            scWords = shuffleArray([...vocabData]).slice(0, 5);
+            scStartTime = Date.now();
+            showView('scrambler');
+            loadScrambleLevel();
+        }
+
+        function loadScrambleLevel() {
+            if (scCurrentIndex >= scWords.length) {
+                // Win! Calculate score based on time
+                const timeTaken = (Date.now() - scStartTime) / 1000;
+                const timeBonus = Math.max(0, Math.floor(300 - timeTaken)); // 5 mins par
+                score += timeBonus;
+                endGame("You cracked the codes!");
+                return;
+            }
+
+            document.getElementById('sc-progress').textContent = `Word ${scCurrentIndex + 1} of ${scWords.length}`;
+            
+            const currentObj = scWords[scCurrentIndex];
+            scTargetWord = currentObj.word.toUpperCase();
+            scCurrentAttempt = Array(scTargetWord.length).fill(null);
+            
+            document.getElementById('sc-definition').textContent = currentObj.def;
+
+            // Re-animate
+            const playArea = document.getElementById('sc-play-area');
+            playArea.classList.remove('animate-pop-in');
+            void playArea.offsetWidth; 
+            playArea.classList.add('animate-pop-in');
+
+            renderScramblerUI();
+        }
+
+        function renderScramblerUI() {
+            const slotsContainer = document.getElementById('sc-target-slots');
+            const poolContainer = document.getElementById('sc-letters-pool');
+            
+            slotsContainer.innerHTML = '';
+            poolContainer.innerHTML = '';
+
+            // Render Slots
+            scCurrentAttempt.forEach((letter, index) => {
+                const slot = document.createElement('div');
+                slot.className = `letter-tile ${letter ? 'filled' : 'empty'}`;
+                slot.textContent = letter || '';
+                if(letter) {
+                    slot.onclick = () => returnLetter(index, letter);
+                }
+                slotsContainer.appendChild(slot);
+            });
+
+            // Calculate remaining letters in pool
+            let poolLetters = scTargetWord.split('');
+            scCurrentAttempt.forEach(l => {
+                if (l) {
+                    const idx = poolLetters.indexOf(l);
+                    if (idx > -1) poolLetters.splice(idx, 1);
+                }
+            });
+
+            // Standardize shuffle seed for pool based on remaining letters so they don't jump randomly on every click
+            // Actually, sorting them alphabetically makes it less chaotic when returning a letter
+            poolLetters.sort();
+
+            // Render Pool
+            poolLetters.forEach((letter, i) => {
+                const btn = document.createElement('div');
+                btn.className = "letter-tile filled";
+                // Make pool color slightly different (indigo)
+                btn.style.background = "linear-gradient(to bottom right, #6366f1, #4338ca)";
+                btn.style.borderColor = "#818cf8";
+                btn.style.boxShadow = "0 4px 0 #3730a3";
+                btn.textContent = letter;
+                btn.onclick = () => addLetter(letter);
+                poolContainer.appendChild(btn);
+            });
+            
+            checkScrambleWin();
+        }
+
+        function addLetter(letter) {
+            const firstEmpty = scCurrentAttempt.indexOf(null);
+            if (firstEmpty > -1) {
+                scCurrentAttempt[firstEmpty] = letter;
+                renderScramblerUI();
+            }
+        }
+
+        function returnLetter(slotIndex, letter) {
+            scCurrentAttempt[slotIndex] = null;
+            renderScramblerUI();
+        }
+
+        function scramblerClear() {
+            scCurrentAttempt = Array(scTargetWord.length).fill(null);
+            renderScramblerUI();
+        }
+
+        function checkScrambleWin() {
+            if (!scCurrentAttempt.includes(null)) {
+                const guess = scCurrentAttempt.join('');
+                if (guess === scTargetWord) {
+                    // Correct!
+                    score += 50; // 50 pts per word
+                    const slots = document.getElementById('sc-target-slots').children;
+                    for(let s of slots) {
+                        s.style.background = "linear-gradient(to bottom right, #10b981, #059669)";
+                        s.style.borderColor = "#34d399";
+                        s.style.boxShadow = "0 4px 0 #047857";
+                    }
+                    setTimeout(() => {
+                        scCurrentIndex++;
+                        loadScrambleLevel();
+                    }, 800);
+                } else {
+                    // Wrong word full
+                    const container = document.getElementById('sc-target-slots');
+                    container.classList.add('animate-shake');
+                    setTimeout(() => container.classList.remove('animate-shake'), 400);
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>
