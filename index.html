@@ -248,6 +248,21 @@
                     </div>
                 </div>
 
+                <!-- Adjustable Timer -->
+                <div class="bg-black/30 border border-white/10 rounded-2xl p-4 mb-8 text-center max-w-md mx-auto shadow-inner">
+                    <div class="text-5xl font-display text-white mb-3 tracking-widest" id="sn-timer-display">01:00</div>
+                    <div class="flex justify-center items-center gap-4 mb-4">
+                        <button onclick="adjustSnTimer(-10)" class="text-slate-300 hover:text-white px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition font-bold">-10s</button>
+                        <span class="text-slate-400 text-xs uppercase tracking-widest font-bold">Adjust Time</span>
+                        <button onclick="adjustSnTimer(10)" class="text-slate-300 hover:text-white px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition font-bold">+10s</button>
+                    </div>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="startSnTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded-xl transition shadow-[0_3px_0_#047857] active:translate-y-1 active:shadow-none">Start</button>
+                        <button onclick="pauseSnTimer()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-6 rounded-xl transition shadow-[0_3px_0_#b45309] active:translate-y-1 active:shadow-none">Pause</button>
+                        <button onclick="resetSnTimer()" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-xl transition shadow-[0_3px_0_#475569] active:translate-y-1 active:shadow-none">Reset</button>
+                    </div>
+                </div>
+
                 <!-- Word Display -->
                 <div class="text-center">
                     <p class="text-slate-300 font-bold uppercase tracking-widest text-sm mb-6">Target Words to Connect:</p>
@@ -347,6 +362,7 @@
             // Stop timers if leaving a game
             if (viewId === 'dashboard') {
                 clearInterval(srTimer);
+                if (typeof snTimerInterval !== 'undefined') clearInterval(snTimerInterval);
             }
         }
 
@@ -576,10 +592,17 @@
         let team1Score = 0;
         let team2Score = 0;
 
+        // Sentence Clash Timer Variables
+        let snTimerInterval;
+        let snInitialTime = 60; // Default to 60 seconds
+        let snTimeLeft = 60;
+        let snIsRunning = false;
+
         function initSentenceGame() {
             team1Score = 0;
             team2Score = 0;
             updateScoreboard();
+            resetSnTimer();
             showView('sentence');
             nextSentenceWords();
         }
@@ -624,6 +647,63 @@
                     </div>
                 `;
             });
+        }
+
+        // --- SENTENCE CLASH TIMER FUNCTIONS ---
+        function updateSnTimerDisplay() {
+            const mins = Math.floor(snTimeLeft / 60).toString().padStart(2, '0');
+            const secs = (snTimeLeft % 60).toString().padStart(2, '0');
+            const display = document.getElementById('sn-timer-display');
+            display.innerText = `${mins}:${secs}`;
+            
+            if (snTimeLeft <= 10 && snTimeLeft > 0) {
+                display.classList.add('text-red-500');
+                display.classList.remove('text-white');
+            } else {
+                display.classList.remove('text-red-500');
+                display.classList.add('text-white');
+            }
+        }
+
+        function adjustSnTimer(amount) {
+            if (!snIsRunning) {
+                snInitialTime = Math.max(10, snInitialTime + amount); // Minimum 10 seconds
+                snTimeLeft = snInitialTime;
+                updateSnTimerDisplay();
+            }
+        }
+
+        function startSnTimer() {
+            if (!snIsRunning && snTimeLeft > 0) {
+                snIsRunning = true;
+                snTimerInterval = setInterval(() => {
+                    snTimeLeft--;
+                    updateSnTimerDisplay();
+                    if (snTimeLeft <= 0) {
+                        clearInterval(snTimerInterval);
+                        snIsRunning = false;
+                        const display = document.getElementById('sn-timer-display');
+                        display.innerText = "TIME'S UP!";
+                        display.classList.add('text-red-500', 'animate-shake');
+                        setTimeout(() => display.classList.remove('animate-shake'), 500);
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseSnTimer() {
+            snIsRunning = false;
+            clearInterval(snTimerInterval);
+        }
+
+        function resetSnTimer() {
+            snIsRunning = false;
+            clearInterval(snTimerInterval);
+            snTimeLeft = snInitialTime;
+            const display = document.getElementById('sn-timer-display');
+            display.classList.remove('animate-shake', 'text-red-500');
+            display.classList.add('text-white');
+            updateSnTimerDisplay();
         }
 
     </script>
