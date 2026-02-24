@@ -128,7 +128,6 @@
                 <p class="text-xl text-indigo-200">Competition, Nature, & The Cold War</p>
             </div>
 
-            <!-- Changed to 2x2 Grid for 4 games -->
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- Game 1 Card -->
                 <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-emerald-400 game-btn">
@@ -160,7 +159,7 @@
                     <button onclick="startGame('sentence')" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#be123c] active:shadow-[0_0px_0_#be123c] active:translate-y-1 transition-all">Play Now</button>
                 </div>
 
-                <!-- Game 4 Card (NEW) -->
+                <!-- Game 4 Card -->
                 <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-cyan-400 game-btn">
                     <div>
                         <div class="text-5xl mb-4">🎤</div>
@@ -186,9 +185,9 @@
                 <div class="text-center text-sm font-bold text-slate-300 mb-8 tracking-widest uppercase">Time Left: <span id="sr-time-text" class="text-white">60</span>s</div>
 
                 <div id="sr-play-area" class="animate-pop-in">
-                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-8 rounded-2xl mb-8 text-center shadow-inner">
-                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Definition</span>
-                        <h3 id="sr-definition" class="text-2xl md:text-3xl font-medium text-white leading-tight"></h3>
+                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-8 rounded-2xl mb-8 text-center shadow-inner min-h-[160px] flex flex-col justify-center">
+                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Definition / Context</span>
+                        <h3 id="sr-definition" class="text-xl md:text-3xl font-medium text-white leading-tight"></h3>
                     </div>
 
                     <div id="sr-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -239,7 +238,6 @@
 
                 <!-- Scoreboard -->
                 <div class="grid grid-cols-2 gap-4 md:gap-8 mb-10">
-                    <!-- Team 1 -->
                     <div class="bg-blue-900/40 border-2 border-blue-500/50 rounded-2xl p-4 text-center shadow-lg">
                         <h3 class="text-blue-300 font-display text-xl mb-1">TEAM A</h3>
                         <div class="text-5xl font-black text-white mb-4" id="team1-score">0</div>
@@ -248,7 +246,6 @@
                             <button onclick="updateTeamScore(1, 10)" class="bg-blue-600 hover:bg-blue-500 text-white w-10 h-10 rounded-full font-bold text-xl shadow-[0_3px_0_#1e3a8a] active:translate-y-1 active:shadow-none transition">+</button>
                         </div>
                     </div>
-                    <!-- Team 2 -->
                     <div class="bg-rose-900/40 border-2 border-rose-500/50 rounded-2xl p-4 text-center shadow-lg">
                         <h3 class="text-rose-300 font-display text-xl mb-1">TEAM B</h3>
                         <div class="text-5xl font-black text-white mb-4" id="team2-score">0</div>
@@ -295,7 +292,7 @@
             </div>
         </div>
 
-        <!-- REPORTER'S RUSH VIEW (NEW) -->
+        <!-- REPORTER'S RUSH VIEW -->
         <div id="view-reporter" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative max-w-3xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
@@ -312,10 +309,10 @@
                 <!-- Play Area -->
                 <div id="rep-play-area" class="animate-pop-in mt-8">
                     
-                    <div class="bg-slate-900/80 border border-cyan-500/50 p-8 rounded-2xl mb-8 text-center shadow-xl relative">
+                    <div class="bg-slate-900/80 border border-cyan-500/50 p-8 rounded-2xl mb-8 text-center shadow-xl relative min-h-[220px] flex flex-col justify-center">
                         <span class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-600 text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-lg">Direct Quote</span>
                         
-                        <h3 id="rep-quote" class="text-xl md:text-3xl font-medium text-white leading-relaxed italic mb-6 mt-4 font-serif"></h3>
+                        <h3 id="rep-quote" class="text-xl md:text-2xl font-medium text-white leading-relaxed italic mb-6 mt-4 font-serif"></h3>
                         
                         <div class="bg-black/30 p-4 rounded-xl border border-white/10">
                             <p id="rep-sentence" class="text-cyan-200 font-bold text-lg md:text-xl"></p>
@@ -349,25 +346,93 @@
 
     <!-- SCRIPTS -->
     <script>
-        // --- VOCABULARY DATA (Game 1 & 2) ---
+        // --- MASSIVE VOCABULARY DATA BANK (Game 1 & 2) ---
+        // 4 Variations per word to ensure high replayability (68 questions)
         const vocabData = [
             { word: "rivalry", def: "A state of intense competition between two people or groups." },
+            { word: "rivalry", def: "A long-standing conflict or competition, like between Edison and Tesla." },
+            { word: "rivalry", def: "The two sports teams had a fierce _________ that lasted for years." },
+            { word: "rivalry", def: "A situation where two groups are constantly trying to beat each other." },
+            
             { word: "opponent", def: "Someone who competes against or fights another in a contest." },
+            { word: "opponent", def: "The person or team you must defeat in order to win a match." },
+            { word: "opponent", def: "In the final round of the tournament, she faced a very skilled _________." },
+            { word: "opponent", def: "A rival in a game, debate, or argument." },
+            
             { word: "outperform", def: "To perform better or do better than someone else." },
+            { word: "outperform", def: "To beat a rival by working faster, smarter, or more efficiently." },
+            { word: "outperform", def: "Our new technology is designed to _________ all older models." },
+            { word: "outperform", def: "To get higher scores or better results than your competitors." },
+            
             { word: "interspecies", def: "Competition or interaction occurring between DIFFERENT species." },
+            { word: "interspecies", def: "A lion hunting a zebra is an example of _________ interaction." },
+            { word: "interspecies", def: "When two distinct animal groups fight over the exact same food source." },
+            { word: "interspecies", def: "Relationships that cross the boundaries of animal families." },
+            
             { word: "intraspecies", def: "Competition or interaction occurring within the SAME species." },
+            { word: "intraspecies", def: "Two male deer fighting each other for territory is _________ competition." },
+            { word: "intraspecies", def: "Conflicts that happen between members of the identical animal family." },
+            { word: "intraspecies", def: "When birds of the exact same kind fight over the best nesting spots." },
+            
             { word: "coexist", def: "To live in peace at the same time or in the same place." },
+            { word: "coexist", def: "When two different groups share a habitat without destroying each other." },
+            { word: "coexist", def: "Despite their differences, the two communities learned to _________ peacefully." },
+            { word: "coexist", def: "To exist together in harmony." },
+            
             { word: "cooperate", def: "To work together towards a shared goal." },
+            { word: "cooperate", def: "When individuals join forces to achieve something they couldn't do alone." },
+            { word: "cooperate", def: "In a successful team, everyone must _________ in order to win." },
+            { word: "cooperate", def: "To assist someone or comply with their requests." },
+            
             { word: "emigrate", def: "To leave one's own area or country to settle permanently in another." },
+            { word: "emigrate", def: "When an animal species leaves a dying habitat to find a completely new home." },
+            { word: "emigrate", def: "During the terrible drought, the birds had to _________ to find water." },
+            { word: "emigrate", def: "To exit your homeland to live somewhere else." },
+            
             { word: "invasive", def: "A species that spreads quickly and harms the new environment." },
+            { word: "invasive", def: "Rabbits in Australia are an example of this type of destructive species." },
+            { word: "invasive", def: "A plant or animal that takes over a new territory aggressively." },
+            { word: "invasive", def: "Species that are not native and cause ecological damage." },
+            
             { word: "adapt", def: "To change behavior or physical traits to survive in a new environment." },
+            { word: "adapt", def: "What a species must do if its habitat suddenly changes to avoid dying out." },
+            { word: "adapt", def: "Animals in the Arctic had to _________ to the extreme cold by growing thicker fur." },
+            { word: "adapt", def: "To adjust or modify oneself to fit new conditions." },
+            
             { word: "extinction", def: "The state or process of a species dying out completely." },
+            { word: "extinction", def: "What happens when a species fails to adapt and disappears forever." },
+            { word: "extinction", def: "The dinosaurs faced _________ after the massive asteroid hit Earth." },
+            { word: "extinction", def: "When there are no living members of an animal family left." },
+            
             { word: "anxiety", def: "A strong feeling of worry, nervousness, or unease under pressure." },
+            { word: "anxiety", def: "The feeling of intense stress before a big test, speech, or performance." },
+            { word: "anxiety", def: "Many students experience _________ when they have to speak in public." },
+            { word: "anxiety", def: "A psychological state of fear about what might happen." },
+            
             { word: "catalyst", def: "A person or thing that causes an event or change to happen quickly." },
+            { word: "catalyst", def: "The Cold War was a _________ for the rapid invention of the internet." },
+            { word: "catalyst", def: "Something that sparks rapid progress or a sudden reaction." },
+            { word: "catalyst", def: "An agent that provokes or speeds up significant change." },
+            
             { word: "transparent", def: "Open, honest, and easy to understand; without hidden secrets." },
+            { word: "transparent", def: "A system where everyone can clearly see how decisions are made." },
+            { word: "transparent", def: "The government promised to be fully _________ with the public about the budget." },
+            { word: "transparent", def: "The opposite of secretive; letting light and truth pass through." },
+            
             { word: "secrecy", def: "The action of keeping things hidden from others." },
-            { word: "underperform", def: "To do worse than expected, often due to pressure." },
-            { word: "battleground", def: "A place where a fight, conflict, or competition happens." }
+            { word: "secrecy", def: "The practice of hiding information, often used by spies during the Cold War." },
+            { word: "secrecy", def: "The military project was conducted in absolute _________ so the enemy wouldn't know." },
+            { word: "secrecy", def: "A lack of transparency; maintaining a hidden state." },
+            
+            { word: "underperform", def: "To do worse than expected, often due to extreme pressure." },
+            { word: "underperform", def: "When anxiety causes an athlete to fail or play poorly during a big match." },
+            { word: "underperform", def: "If you don't practice enough, you will likely _________ on the final test." },
+            { word: "underperform", def: "To fail to reach the expected standard or level of success." },
+            
+            { word: "battleground", def: "A place where a fight, conflict, or competition happens." },
+            { word: "battleground", def: "The global market became a fierce _________ for the rival tech companies." },
+            { word: "battleground", def: "A literal or figurative arena for a clash between two opponents." },
+            { word: "battleground", def: "The territory where a war or intense debate takes place." }
         ];
 
         // --- SENTENCE GROUPS (Game 3) ---
@@ -382,28 +447,92 @@
             ["adapt", "invasive", "cooperate"]
         ];
 
-        // --- REPORTER'S RUSH DATA (Game 4) ---
+        // --- MASSIVE REPORTER'S RUSH DATA (Game 4) ---
+        // 4 Variations per verb (60 questions)
         const reporterData = [
-            { quote: `"I definitely didn't steal the secret documents!"`, sentence: `The spy _________ stealing the documents.`, answer: `denied`, options: [`denied`, `admitted`, `suggested`, `promised`] },
+            // Denied
+            { quote: `"I didn't steal the secret documents!"`, sentence: `The spy _________ stealing the documents.`, answer: `denied`, options: [`denied`, `admitted`, `suggested`, `promised`] },
+            { quote: `"It wasn't me who broke the lab equipment."`, sentence: `The scientist _________ breaking the equipment.`, answer: `denied`, options: [`denied`, `warned`, `advised`, `praised`] },
+            { quote: `"I never spoke to the enemy agents."`, sentence: `The official _________ speaking to the enemy.`, answer: `denied`, options: [`denied`, `agreed`, `wondered`, `insisted`] },
+            { quote: `"I absolutely did not cheat on the exam."`, sentence: `The student _________ cheating on the exam.`, answer: `denied`, options: [`denied`, `threatened`, `refused`, `claimed`] },
+            // Advised
             { quote: `"You should really stay inside the safehouse tonight."`, sentence: `The officer _________ him to stay inside.`, answer: `advised`, options: [`advised`, `threatened`, `refused`, `wondered`] },
+            { quote: `"I think you ought to get some rest before the mission."`, sentence: `The doctor _________ her to rest.`, answer: `advised`, options: [`advised`, `denied`, `admitted`, `promised`] },
+            { quote: `"If I were you, I'd review the flight manual again."`, sentence: `The commander _________ us to review the manual.`, answer: `advised`, options: [`advised`, `regretted`, `claimed`, `suggested`] },
+            { quote: `"You should wear a helmet when testing that machine."`, sentence: `She _________ him to wear a helmet.`, answer: `advised`, options: [`advised`, `praised`, `agreed`, `insisted`] },
+            // Promised
             { quote: `"I will absolutely help you build the rocket tomorrow."`, sentence: `The engineer _________ to help build it.`, answer: `promised`, options: [`promised`, `warned`, `denied`, `regretted`] },
+            { quote: `"I swear I will keep your identity a secret."`, sentence: `She _________ to keep the secret.`, answer: `promised`, options: [`promised`, `refused`, `wondered`, `suggested`] },
+            { quote: `"We will definitely send aid to your country next week."`, sentence: `The ally _________ to send aid.`, answer: `promised`, options: [`promised`, `threatened`, `admitted`, `claimed`] },
+            { quote: `"I'll pay you back the money on Friday."`, sentence: `He _________ to pay me back.`, answer: `promised`, options: [`promised`, `advised`, `insisted`, `praised`] },
+            // Warned
             { quote: `"Don't touch that control panel, it's live!"`, sentence: `He _________ me not to touch the panel.`, answer: `warned`, options: [`warned`, `praised`, `admitted`, `decided`] },
-            { quote: `"I wish I hadn't missed the historic launch."`, sentence: `The scientist _________ missing the launch.`, answer: `regretted`, options: [`regretted`, `praised`, `insisted`, `denied`] },
+            { quote: `"If you cross the border line, we will shoot."`, sentence: `The guard _________ them not to cross.`, answer: `warned`, options: [`warned`, `agreed`, `regretted`, `suggested`] },
+            { quote: `"Be careful, the ice on the lake is very thin."`, sentence: `She _________ him that the ice was thin.`, answer: `warned`, options: [`warned`, `denied`, `promised`, `wondered`] },
+            { quote: `"Do not open that file, it's a computer virus trap."`, sentence: `The IT agent _________ him not to open the file.`, answer: `warned`, options: [`warned`, `insisted`, `refused`, `claimed`] },
+            // Regretted
+            { quote: `"I wish I hadn't missed the historic moon launch."`, sentence: `The scientist _________ missing the launch.`, answer: `regretted`, options: [`regretted`, `praised`, `insisted`, `denied`] },
+            { quote: `"I'm so sorry I sold the company secrets."`, sentence: `He _________ selling the secrets.`, answer: `regretted`, options: [`regretted`, `threatened`, `advised`, `wondered`] },
+            { quote: `"If only I had studied harder for the physics test."`, sentence: `She _________ not studying harder.`, answer: `regretted`, options: [`regretted`, `promised`, `agreed`, `admitted`] },
+            { quote: `"It's a shame we spent so much money on nuclear weapons."`, sentence: `The historian _________ spending so much money.`, answer: `regretted`, options: [`regretted`, `refused`, `warned`, `suggested`] },
+            // Suggested
             { quote: `"Why don't we try planting more trees in the ecosystem?"`, sentence: `The biologist _________ planting more trees.`, answer: `suggested`, options: [`suggested`, `refused`, `warned`, `threatened`] },
+            { quote: `"Let's test the rocket engines one more time."`, sentence: `The expert _________ testing the engines.`, answer: `suggested`, options: [`suggested`, `denied`, `praised`, `promised`] },
+            { quote: `"How about we take a break from the research?"`, sentence: `She _________ taking a break.`, answer: `suggested`, options: [`suggested`, `claimed`, `insisted`, `admitted`] },
+            { quote: `"We could meet at the library to plan the project."`, sentence: `He _________ meeting at the library.`, answer: `suggested`, options: [`suggested`, `regretted`, `advised`, `agreed`] },
+            // Claimed
             { quote: `"My AC design is vastly superior to your DC design."`, sentence: `Tesla _________ that his design was superior.`, answer: `claimed`, options: [`claimed`, `wondered`, `advised`, `threatened`] },
+            { quote: `"I saw a UFO flying over the base last night."`, sentence: `The man _________ to have seen a UFO.`, answer: `claimed`, options: [`claimed`, `refused`, `promised`, `regretted`] },
+            { quote: `"Our computer system is the fastest in the world."`, sentence: `The company _________ that their system was fastest.`, answer: `claimed`, options: [`claimed`, `denied`, `warned`, `praised`] },
+            { quote: `"I have the highest test score in the entire class."`, sentence: `He _________ to have the highest score.`, answer: `claimed`, options: [`claimed`, `suggested`, `insisted`, `admitted`] },
+            // Refused
             { quote: `"I will NOT give you the launch codes!"`, sentence: `The captain _________ to give the codes.`, answer: `refused`, options: [`refused`, `agreed`, `admitted`, `advised`] },
+            { quote: `"I'm not going to fly this unsafe rocket."`, sentence: `Komarov _________ to fly the rocket.`, answer: `refused`, options: [`refused`, `praised`, `wondered`, `promised`] },
+            { quote: `"No, I won't help you cheat on the competition."`, sentence: `She _________ to help him cheat.`, answer: `refused`, options: [`refused`, `threatened`, `regretted`, `claimed`] },
+            { quote: `"I will not sign this unfair contract."`, sentence: `The player _________ to sign the contract.`, answer: `refused`, options: [`refused`, `warned`, `suggested`, `denied`] },
+            // Wondered
             { quote: `"Will we ever find life on Mars?"`, sentence: `The student _________ if they would find life.`, answer: `wondered`, options: [`wondered`, `stated`, `denied`, `refused`] },
+            { quote: `"What time does the satellite pass overhead?"`, sentence: `He _________ what time the satellite passed.`, answer: `wondered`, options: [`wondered`, `insisted`, `promised`, `advised`] },
+            { quote: `"Are they secretly building a new weapon?"`, sentence: `She _________ if they were building a weapon.`, answer: `wondered`, options: [`wondered`, `threatened`, `agreed`, `praised`] },
+            { quote: `"Why is the sky blue on Earth but black on the Moon?"`, sentence: `The child _________ why the sky was blue.`, answer: `wondered`, options: [`wondered`, `regretted`, `claimed`, `admitted`] },
+            // Threatened
             { quote: `"If you cross the border, we will arrest you."`, sentence: `The guard _________ to arrest them.`, answer: `threatened`, options: [`threatened`, `suggested`, `praised`, `agreed`] },
+            { quote: `"Tell me the truth or I'll fire you immediately."`, sentence: `The boss _________ to fire him.`, answer: `threatened`, options: [`threatened`, `wondered`, `denied`, `promised`] },
+            { quote: `"I'll destroy your reputation if you tell anyone."`, sentence: `The rival _________ to destroy her reputation.`, answer: `threatened`, options: [`threatened`, `advised`, `refused`, `claimed`] },
+            { quote: `"Hand over the money, or else!"`, sentence: `The thief _________ to hurt them.`, answer: `threatened`, options: [`threatened`, `regretted`, `admitted`, `insisted`] },
+            // Praised
             { quote: `"You showed incredible bravery on the space mission."`, sentence: `The President _________ the astronaut for his bravery.`, answer: `praised`, options: [`praised`, `warned`, `denied`, `refused`] },
+            { quote: `"Excellent work on the final project, team!"`, sentence: `The manager _________ the team for their work.`, answer: `praised`, options: [`praised`, `threatened`, `wondered`, `suggested`] },
+            { quote: `"You played a fantastic game today."`, sentence: `The coach _________ the player for her game.`, answer: `praised`, options: [`praised`, `claimed`, `agreed`, `promised`] },
+            { quote: `"Your new invention is truly a masterpiece."`, sentence: `The critic _________ the inventor for his masterpiece.`, answer: `praised`, options: [`praised`, `advised`, `regretted`, `admitted`] },
+            // Agreed
             { quote: `"Alright, I'll sign the peace treaty with your country."`, sentence: `The leader _________ to sign the treaty.`, answer: `agreed`, options: [`agreed`, `refused`, `denied`, `wondered`] },
+            { quote: `"Yes, that's a very fair price for the equipment."`, sentence: `The buyer _________ to the price.`, answer: `agreed`, options: [`agreed`, `threatened`, `warned`, `praised`] },
+            { quote: `"Okay, I will help you with the research."`, sentence: `My colleague _________ to help me.`, answer: `agreed`, options: [`agreed`, `insisted`, `suggested`, `claimed`] },
+            { quote: `"Fine, we'll do the experiment your way."`, sentence: `They _________ to do it my way.`, answer: `agreed`, options: [`agreed`, `regretted`, `admitted`, `promised`] },
+            // Insisted
             { quote: `"You must leave the building immediately! I demand it!"`, sentence: `The manager _________ on us leaving.`, answer: `insisted`, options: [`insisted`, `promised`, `regretted`, `agreed`] },
+            { quote: `"I really must pay for dinner tonight."`, sentence: `He _________ on paying for dinner.`, answer: `insisted`, options: [`insisted`, `wondered`, `denied`, `advised`] },
+            { quote: `"It is absolutely necessary that we launch today."`, sentence: `She _________ on launching today.`, answer: `insisted`, options: [`insisted`, `threatened`, `praised`, `refused`] },
+            { quote: `"You have to believe me, the danger is real!"`, sentence: `The spy _________ that he was telling the truth.`, answer: `insisted`, options: [`insisted`, `suggested`, `claimed`, `warned`] },
+            // Admitted
             { quote: `"Yes, it was me who broke the lab equipment."`, sentence: `The technician _________ breaking the equipment.`, answer: `admitted`, options: [`admitted`, `denied`, `threatened`, `advised`] },
-            { quote: `"We are going to increase funding for NASA next year."`, sentence: `The politician _________ that they would increase funding.`, answer: `announced`, options: [`announced`, `wondered`, `refused`, `advised`] }
+            { quote: `"Okay, I made a mistake in the calculations."`, sentence: `She _________ making a mistake.`, answer: `admitted`, options: [`admitted`, `praised`, `refused`, `promised`] },
+            { quote: `"It's true, we copied their design."`, sentence: `The CEO _________ copying the design.`, answer: `admitted`, options: [`admitted`, `wondered`, `agreed`, `insisted`] },
+            { quote: `"I lied about my age on the application."`, sentence: `He _________ lying about his age.`, answer: `admitted`, options: [`admitted`, `claimed`, `regretted`, `warned`] },
+            // Announced
+            { quote: `"We are going to increase funding for NASA next year."`, sentence: `The politician _________ that they would increase funding.`, answer: `announced`, options: [`announced`, `wondered`, `refused`, `advised`] },
+            { quote: `"The war is officially over!"`, sentence: `The general _________ that the war was over.`, answer: `announced`, options: [`announced`, `denied`, `threatened`, `suggested`] },
+            { quote: `"We have successfully discovered a new planet."`, sentence: `The scientists _________ the discovery.`, answer: `announced`, options: [`announced`, `regretted`, `admitted`, `praised`] },
+            { quote: `"The flight to London is boarding now."`, sentence: `The gate agent _________ that the flight was boarding.`, answer: `announced`, options: [`announced`, `insisted`, `promised`, `agreed`] }
         ];
 
-        // --- GLOBAL STATE ---
+        // --- GLOBAL STATE & DECK MANAGEMENT ---
         let currentGame = '';
         let score = 0;
+        
+        let srDeck = [];
+        let repDeck = [];
 
         // Utility: Shuffle Array
         function shuffleArray(array) {
@@ -454,6 +583,8 @@
         function initSpeedRun() {
             srTimeLeft = 60;
             score = 0;
+            // Initialize fresh deck for 0% repetition
+            srDeck = shuffleArray([...vocabData]);
             updateSrUI();
             showView('speedrun');
             nextSrQuestion();
@@ -487,11 +618,30 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            const shuffledVocab = shuffleArray([...vocabData]);
-            srCurrentWord = shuffledVocab[0];
-            const wrongWords = shuffledVocab.slice(1, 4);
+            // Refill deck if empty
+            if (srDeck.length === 0) {
+                srDeck = shuffleArray([...vocabData]);
+            }
             
-            const options = shuffleArray([srCurrentWord, ...wrongWords]);
+            // Draw from deck
+            srCurrentWord = srDeck.pop();
+            
+            // Get 3 wrong words (ensuring they don't match the current word)
+            const availableWrongWords = vocabData.filter(v => v.word !== srCurrentWord.word);
+            // We need unique wrong words for the buttons
+            const uniqueWrongWords = [];
+            const usedWords = new Set([srCurrentWord.word]);
+            
+            shuffleArray(availableWrongWords);
+            for (let w of availableWrongWords) {
+                if (!usedWords.has(w.word)) {
+                    uniqueWrongWords.push(w);
+                    usedWords.add(w.word);
+                }
+                if (uniqueWrongWords.length >= 3) break;
+            }
+            
+            const options = shuffleArray([srCurrentWord, ...uniqueWrongWords]);
 
             document.getElementById('sr-definition').textContent = srCurrentWord.def;
             
@@ -539,7 +689,21 @@
         function initScrambler() {
             score = 0;
             scCurrentIndex = 0;
-            scWords = shuffleArray([...vocabData]).slice(0, 5);
+            
+            // Get 5 unique words by filtering the massive data bank
+            const uniqueSet = [];
+            const seenWords = new Set();
+            const shuffledFull = shuffleArray([...vocabData]);
+            
+            for(let item of shuffledFull) {
+                if(!seenWords.has(item.word)) {
+                    seenWords.add(item.word);
+                    uniqueSet.push(item);
+                }
+                if(uniqueSet.length >= 5) break;
+            }
+            scWords = uniqueSet;
+            
             scStartTime = Date.now();
             showView('scrambler');
             loadScrambleLevel();
@@ -766,7 +930,7 @@
             updateSnTimerDisplay();
         }
 
-        // --- GAME 4: REPORTER'S RUSH LOGIC (NEW) ---
+        // --- GAME 4: REPORTER'S RUSH LOGIC ---
         let repScore = 0;
         let repLives = 3;
         let currentRepQuestion = null;
@@ -774,6 +938,8 @@
         function initReporterGame() {
             repScore = 0;
             repLives = 3;
+            // Initialize fresh deck for 0% repetition
+            repDeck = shuffleArray([...reporterData]);
             updateRepUI();
             showView('reporter');
             nextRepQuestion();
@@ -794,9 +960,13 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            // Pick a random question
-            const randIndex = Math.floor(Math.random() * reporterData.length);
-            currentRepQuestion = reporterData[randIndex];
+            // Refill deck if empty
+            if (repDeck.length === 0) {
+                repDeck = shuffleArray([...reporterData]);
+            }
+
+            // Draw from deck
+            currentRepQuestion = repDeck.pop();
 
             document.getElementById('rep-quote').textContent = currentRepQuestion.quote;
             document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="border-b-2 border-cyan-400 px-4 py-1 text-white inline-block min-w-[100px] text-center">_________</span>`);
