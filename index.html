@@ -67,8 +67,6 @@
             font-size: 1.5rem;
             font-weight: 800;
             border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
             user-select: none;
             text-transform: uppercase;
         }
@@ -76,7 +74,6 @@
         .letter-tile.empty {
             background: rgba(255,255,255,0.1);
             border: 2px dashed rgba(255,255,255,0.3);
-            cursor: default;
         }
 
         .letter-tile.filled {
@@ -84,10 +81,6 @@
             color: #fff;
             border: 2px solid #fbbf24;
             box-shadow: 0 4px 0 #b45309;
-        }
-        .letter-tile.filled:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #b45309;
         }
 
         /* Timer Bar */
@@ -139,12 +132,12 @@
                     <button onclick="startGame('speedrun')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#059669] active:shadow-[0_0px_0_#059669] active:translate-y-1 transition-all">Play Now</button>
                 </div>
 
-                <!-- Game 2 Card -->
+                <!-- Game 2 Card (UPDATED TO HANGMAN) -->
                 <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-purple-400 game-btn">
                     <div>
-                        <div class="text-5xl mb-4">🧩</div>
-                        <h2 class="text-2xl text-purple-300 mb-2 font-display">Word Scrambler</h2>
-                        <p class="text-slate-300 text-sm mb-6">Read the definition and reconstruct the target word from scrambled tiles.</p>
+                        <div class="text-5xl mb-4">🤔</div>
+                        <h2 class="text-2xl text-purple-300 mb-2 font-display">Hangman</h2>
+                        <p class="text-slate-300 text-sm mb-6">Read the definition and guess the target word letter by letter before you run out of lives.</p>
                     </div>
                     <button onclick="startGame('scrambler')" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#4f46e5] active:shadow-[0_0px_0_#4f46e5] active:translate-y-1 transition-all">Play Now</button>
                 </div>
@@ -169,7 +162,7 @@
                     <button onclick="startGame('reporter')" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#0891b2] active:shadow-[0_0px_0_#0891b2] active:translate-y-1 transition-all">Play Now</button>
                 </div>
 
-                <!-- Game 5 Card (NEW) -->
+                <!-- Game 5 Card -->
                 <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-pink-400 game-btn lg:col-start-2">
                     <div>
                         <div class="text-5xl mb-4">🏃‍♂️</div>
@@ -207,40 +200,65 @@
             </div>
         </div>
 
-        <!-- SCRAMBLER VIEW -->
+        <!-- SCRAMBLER / HANGMAN VIEW -->
         <div id="view-scrambler" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative">
-                <div class="flex justify-between items-center mb-8">
+                <div class="flex justify-between items-center mb-4">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
                     <div class="text-xl font-display text-purple-400" id="sc-progress">Word 1 of 5</div>
                 </div>
 
-                <!-- ADD SCRAMBLER TIMER HERE -->
-                <div class="timer-bar-container max-w-lg mx-auto mb-2">
-                    <div id="sc-timer-bar" class="timer-bar" style="width: 100%;"></div>
-                </div>
-                <div class="text-center text-xs font-bold text-slate-400 mb-8 tracking-widest uppercase">Time Left: <span id="sc-time-text" class="text-white">60</span>s</div>
-
                 <div id="sc-play-area" class="animate-pop-in text-center flex flex-col items-center">
-                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-6 rounded-2xl w-full mb-10 shadow-inner">
-                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Decode this definition</span>
+                    
+                    <div class="bg-indigo-900/50 border border-indigo-500/30 p-6 rounded-2xl w-full mb-8 shadow-inner">
+                        <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Guess the word matching this definition</span>
                         <h3 id="sc-definition" class="text-xl md:text-2xl font-medium text-white leading-tight"></h3>
                     </div>
 
-                    <div class="mb-4 w-full">
-                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-bold">Your Answer:</p>
-                        <div id="sc-target-slots" class="flex flex-wrap justify-center gap-2 mb-8 min-h-[3rem]"></div>
+                    <!-- Hangman Visual -->
+                    <div class="w-full flex justify-center mb-6 h-48">
+                        <svg id="hangman-svg" viewBox="0 0 200 250" class="w-40 h-48 stroke-white fill-transparent stroke-[4px] stroke-linecap-round stroke-linejoin-round drop-shadow-lg transition-transform duration-200">
+                            <!-- Base (Always visible) -->
+                            <line x1="20" y1="230" x2="180" y2="230" stroke="#94a3b8" />
+                            
+                            <!-- Part 1: Scaffold -->
+                            <g id="hm-part-1" style="opacity: 0; transition: opacity 0.3s;">
+                                <line x1="60" y1="230" x2="60" y2="20" />
+                                <line x1="60" y1="20" x2="140" y2="20" />
+                                <line x1="140" y1="20" x2="140" y2="50" />
+                            </g>
+                            <!-- Part 2: Head -->
+                            <circle id="hm-part-2" cx="140" cy="70" r="20" style="opacity: 0; transition: opacity 0.3s;" />
+                            <!-- Part 3: Body -->
+                            <line id="hm-part-3" x1="140" y1="90" x2="140" y2="150" style="opacity: 0; transition: opacity 0.3s;" />
+                            <!-- Part 4: Left Arm -->
+                            <line id="hm-part-4" x1="140" y1="110" x2="110" y2="140" style="opacity: 0; transition: opacity 0.3s;" />
+                            <!-- Part 5: Right Arm -->
+                            <line id="hm-part-5" x1="140" y1="110" x2="170" y2="140" style="opacity: 0; transition: opacity 0.3s;" />
+                            <!-- Part 6: Legs -->
+                            <g id="hm-part-6" style="opacity: 0; transition: opacity 0.3s;">
+                                <line x1="140" y1="150" x2="110" y2="190" />
+                                <line x1="140" y1="150" x2="170" y2="190" />
+                            </g>
+                        </svg>
                     </div>
 
-                    <div class="w-full bg-black/20 p-6 rounded-2xl border border-white/5">
-                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-bold">Available Letters:</p>
-                        <div id="sc-letters-pool" class="flex flex-wrap justify-center gap-3"></div>
+                    <!-- Target Word Slots -->
+                    <div class="mb-8 w-full">
+                        <div id="sc-target-slots" class="flex flex-wrap justify-center gap-2 min-h-[3rem]"></div>
                     </div>
 
-                    <div class="flex gap-4 mt-8 w-full justify-center">
+                    <!-- On-Screen Keyboard -->
+                    <div class="w-full max-w-2xl bg-black/20 p-4 md:p-6 rounded-2xl border border-white/5 mb-6">
+                        <div id="sc-letters-pool" class="flex flex-wrap justify-center content-start">
+                            <!-- Letters injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex gap-4 w-full justify-center">
                         <button onclick="scramblerHint()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#b45309] active:translate-y-1 active:shadow-none text-sm md:text-base">💡 Hint</button>
-                        <button onclick="scramblerClear()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-xl transition shadow-[0_3px_0_#334155] active:translate-y-1 active:shadow-none text-sm md:text-base">Clear</button>
-                        <button onclick="scramblerReveal(true)" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#9f1239] active:translate-y-1 active:shadow-none text-sm md:text-base">👁️ Reveal</button>
+                        <button onclick="scramblerReveal()" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#9f1239] active:translate-y-1 active:shadow-none text-sm md:text-base">👁️ Reveal</button>
                     </div>
                 </div>
             </div>
@@ -353,7 +371,7 @@
             </div>
         </div>
 
-        <!-- RUNNING DICTATION VIEW (NEW) -->
+        <!-- RUNNING DICTATION VIEW -->
         <div id="view-dictation" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative max-w-5xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
@@ -437,7 +455,7 @@
     <!-- SCRIPTS -->
     <script>
         // --- MASSIVE VOCABULARY DATA BANK (Game 1 & 2) ---
-        // 4 Variations per word to ensure high replayability (68 questions)
+        // 4 Variations per word to ensure high replayability
         const vocabData = [
             { word: "rivalry", def: "A state of intense competition between two people or groups." },
             { word: "rivalry", def: "A long-standing conflict or competition, like between Edison and Tesla." },
@@ -538,7 +556,6 @@
         ];
 
         // --- MASSIVE REPORTER'S RUSH DATA (Game 4) ---
-        // 4 Variations per verb (60 questions)
         const reporterData = [
             // Denied
             { quote: `"I didn't steal the secret documents!"`, sentence: `The spy _________ stealing the documents.`, answer: `denied`, options: [`denied`, `admitted`, `suggested`, `promised`] },
@@ -620,7 +637,6 @@
         // --- GLOBAL STATE & DECK MANAGEMENT ---
         let currentGame = '';
         let score = 0;
-        
         let srDeck = [];
         let repDeck = [];
 
@@ -646,7 +662,6 @@
             if (viewId === 'dashboard') {
                 clearInterval(srTimer);
                 if (typeof snTimerInterval !== 'undefined') clearInterval(snTimerInterval);
-                if (typeof scTimerInterval !== 'undefined') clearInterval(scTimerInterval);
             }
         }
 
@@ -654,7 +669,7 @@
             currentGame = type;
             score = 0;
             if (type === 'speedrun') initSpeedRun();
-            if (type === 'scrambler') initScrambler();
+            if (type === 'scrambler') initHangman(); // Routed to new Hangman
             if (type === 'sentence') initSentenceGame();
             if (type === 'reporter') initReporterGame();
             if (type === 'dictation') initDictationGame();
@@ -675,7 +690,6 @@
         function initSpeedRun() {
             srTimeLeft = 60;
             score = 0;
-            // Initialize fresh deck for 0% repetition
             srDeck = shuffleArray([...vocabData]);
             updateSrUI();
             showView('speedrun');
@@ -710,17 +724,13 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            // Refill deck if empty
             if (srDeck.length === 0) {
                 srDeck = shuffleArray([...vocabData]);
             }
             
-            // Draw from deck
             srCurrentWord = srDeck.pop();
             
-            // Get 3 wrong words (ensuring they don't match the current word)
             const availableWrongWords = vocabData.filter(v => v.word !== srCurrentWord.word);
-            // We need unique wrong words for the buttons
             const uniqueWrongWords = [];
             const usedWords = new Set([srCurrentWord.word]);
             
@@ -771,20 +781,19 @@
             }
         }
 
-        // --- GAME 2: WORD SCRAMBLER LOGIC ---
+        // --- GAME 2: HANGMAN LOGIC (Formerly Scrambler) ---
         let scWords = [];
         let scCurrentIndex = 0;
         let scTargetWord = '';
-        let scCurrentAttempt = [];
-        let scStartTime = 0;
-        let scTimerInterval;
-        let scTimeLeft = 60;
+        let scGuessedLetters = new Set();
+        let scLives = 6;
+        const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 
-        function initScrambler() {
+        function initHangman() {
             score = 0;
             scCurrentIndex = 0;
             
-            // Get 5 unique words by filtering the massive data bank
+            // Get 5 unique words
             const uniqueSet = [];
             const seenWords = new Set();
             const shuffledFull = shuffleArray([...vocabData]);
@@ -798,17 +807,15 @@
             }
             scWords = uniqueSet;
             
-            scStartTime = Date.now();
             showView('scrambler');
-            loadScrambleLevel();
+            loadHangmanLevel();
         }
 
-        function loadScrambleLevel() {
+        function loadHangmanLevel() {
             if (scCurrentIndex >= scWords.length) {
-                const timeTaken = (Date.now() - scStartTime) / 1000;
-                const timeBonus = Math.max(0, Math.floor(300 - timeTaken));
-                score += timeBonus;
-                endGame("You cracked the codes!");
+                // Fixed bonus since timer is removed
+                score += 100;
+                endGame("You survived the Hangman Challenge!");
                 return;
             }
 
@@ -816,7 +823,8 @@
             
             const currentObj = scWords[scCurrentIndex];
             scTargetWord = currentObj.word.toUpperCase();
-            scCurrentAttempt = Array(scTargetWord.length).fill(null);
+            scGuessedLetters.clear();
+            scLives = 6;
             
             document.getElementById('sc-definition').textContent = currentObj.def;
 
@@ -825,146 +833,127 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            // Setup Scrambler Timer
-            clearInterval(scTimerInterval);
-            scTimeLeft = 60;
-            updateScTimerUI();
-            scTimerInterval = setInterval(() => {
-                scTimeLeft--;
-                updateScTimerUI();
-                if (scTimeLeft <= 0) {
-                    clearInterval(scTimerInterval);
-                    scramblerReveal(false); // Time out reveal
-                }
-            }, 1000);
-
-            renderScramblerUI();
+            renderHangmanUI();
         }
 
-        function updateScTimerUI() {
-            document.getElementById('sc-time-text').textContent = scTimeLeft;
-            const bar = document.getElementById('sc-timer-bar');
-            bar.style.width = `${(scTimeLeft / 60) * 100}%`;
-            
-            bar.classList.remove('timer-warning', 'timer-danger');
-            if (scTimeLeft <= 20) bar.classList.add('timer-warning');
-            if (scTimeLeft <= 10) bar.classList.add('timer-danger');
-        }
-
-        function renderScramblerUI() {
+        function renderHangmanUI() {
             const slotsContainer = document.getElementById('sc-target-slots');
             const poolContainer = document.getElementById('sc-letters-pool');
             
+            // Render Slots
             slotsContainer.innerHTML = '';
-            poolContainer.innerHTML = '';
-
-            scCurrentAttempt.forEach((letter, index) => {
+            let allRevealed = true;
+            
+            for (let char of scTargetWord) {
                 const slot = document.createElement('div');
-                slot.className = `letter-tile ${letter ? 'filled' : 'empty'}`;
-                slot.textContent = letter || '';
-                if(letter) {
-                    slot.onclick = () => returnLetter(index, letter);
+                if (char === ' ' || char === '-') {
+                    slot.className = `letter-tile empty border-none bg-transparent`;
+                    slot.textContent = char;
+                } else if (scGuessedLetters.has(char)) {
+                    slot.className = `letter-tile filled`;
+                    slot.textContent = char;
+                } else {
+                    slot.className = `letter-tile empty`;
+                    slot.textContent = '';
+                    allRevealed = false;
                 }
                 slotsContainer.appendChild(slot);
-            });
+            }
 
-            let poolLetters = scTargetWord.split('');
-            scCurrentAttempt.forEach(l => {
-                if (l) {
-                    const idx = poolLetters.indexOf(l);
-                    if (idx > -1) poolLetters.splice(idx, 1);
-                }
-            });
-
-            poolLetters.sort();
-
-            poolLetters.forEach((letter) => {
-                const btn = document.createElement('div');
-                btn.className = "letter-tile filled";
-                btn.style.background = "linear-gradient(to bottom right, #6366f1, #4338ca)";
-                btn.style.borderColor = "#818cf8";
-                btn.style.boxShadow = "0 4px 0 #3730a3";
+            // Render Keyboard
+            poolContainer.innerHTML = '';
+            ALPHABET.forEach(letter => {
+                const btn = document.createElement('button');
+                const isGuessed = scGuessedLetters.has(letter);
+                
+                btn.className = `w-10 h-12 m-1 font-bold rounded shadow-sm text-lg transition-all ${
+                    isGuessed 
+                        ? (scTargetWord.includes(letter) 
+                            ? 'bg-emerald-500 text-white opacity-50 cursor-not-allowed shadow-none' 
+                            : 'bg-red-500 text-white opacity-50 cursor-not-allowed shadow-none') 
+                        : 'bg-white text-indigo-900 hover:bg-indigo-100 hover:scale-105 active:scale-95 border-b-2 border-slate-300'
+                }`;
                 btn.textContent = letter;
-                btn.onclick = () => addLetter(letter);
+                btn.disabled = isGuessed || scLives <= 0 || allRevealed;
+                if (!btn.disabled) {
+                    btn.onclick = () => guessLetter(letter);
+                }
                 poolContainer.appendChild(btn);
             });
-            
-            checkScrambleWin();
-        }
 
-        function addLetter(letter) {
-            const firstEmpty = scCurrentAttempt.indexOf(null);
-            if (firstEmpty > -1) {
-                scCurrentAttempt[firstEmpty] = letter;
-                renderScramblerUI();
-            }
-        }
-
-        function returnLetter(slotIndex, letter) {
-            scCurrentAttempt[slotIndex] = null;
-            renderScramblerUI();
-        }
-
-        function scramblerClear() {
-            scCurrentAttempt = Array(scTargetWord.length).fill(null);
-            renderScramblerUI();
-        }
-
-        function scramblerHint() {
-            // Find the first empty or incorrect slot and fill it with correct letter
-            for (let i = 0; i < scTargetWord.length; i++) {
-                if (scCurrentAttempt[i] !== scTargetWord[i]) {
-                    scCurrentAttempt[i] = scTargetWord[i];
-                    break;
+            // Update Hangman SVG Parts
+            for(let i=1; i<=6; i++) {
+                const part = document.getElementById(`hm-part-${i}`);
+                if (part) {
+                    part.style.opacity = (6 - scLives >= i) ? '1' : '0';
                 }
             }
-            score = Math.max(0, score - 5); // Small penalty for using a hint
-            renderScramblerUI();
-        }
 
-        function scramblerReveal(manual = true) {
-            clearInterval(scTimerInterval);
-            scCurrentAttempt = scTargetWord.split('');
-            renderScramblerUI();
-            
-            // Highlight slots as revealed (red outline)
-            const slots = document.getElementById('sc-target-slots').children;
-            for(let s of slots) {
-                s.style.background = "linear-gradient(to bottom right, #ef4444, #b91c1c)";
-                s.style.borderColor = "#fca5a5";
-                s.style.boxShadow = "0 4px 0 #7f1d1d";
-            }
-            
-            if (manual) score = Math.max(0, score - 15); // Penalty for giving up
-            
-            setTimeout(() => {
-                scCurrentIndex++;
-                loadScrambleLevel();
-            }, 1500);
-        }
-
-        function checkScrambleWin() {
-            if (!scCurrentAttempt.includes(null)) {
-                const guess = scCurrentAttempt.join('');
-                if (guess === scTargetWord) {
-                    clearInterval(scTimerInterval); // Stop timer on win
-                    score += 50; 
-                    const slots = document.getElementById('sc-target-slots').children;
-                    for(let s of slots) {
+            // Check Win/Loss states
+            if (allRevealed) {
+                score += 50;
+                const slots = slotsContainer.children;
+                for(let s of slots) {
+                    if(s.classList.contains('filled')) {
                         s.style.background = "linear-gradient(to bottom right, #10b981, #059669)";
                         s.style.borderColor = "#34d399";
                         s.style.boxShadow = "0 4px 0 #047857";
                     }
-                    setTimeout(() => {
-                        scCurrentIndex++;
-                        loadScrambleLevel();
-                    }, 800);
-                } else {
-                    const container = document.getElementById('sc-target-slots');
-                    container.classList.add('animate-shake');
-                    setTimeout(() => container.classList.remove('animate-shake'), 400);
                 }
+                setTimeout(() => {
+                    scCurrentIndex++;
+                    loadHangmanLevel();
+                }, 1200);
+            } else if (scLives <= 0) {
+                // Reveal the word in red
+                slotsContainer.innerHTML = '';
+                for (let char of scTargetWord) {
+                    const slot = document.createElement('div');
+                    slot.className = `letter-tile filled`;
+                    slot.style.background = "linear-gradient(to bottom right, #ef4444, #b91c1c)";
+                    slot.style.borderColor = "#fca5a5";
+                    slot.style.boxShadow = "0 4px 0 #7f1d1d";
+                    slot.textContent = char;
+                    slotsContainer.appendChild(slot);
+                }
+                setTimeout(() => {
+                    scCurrentIndex++;
+                    loadHangmanLevel();
+                }, 2000);
             }
+        }
+
+        function guessLetter(letter) {
+            if (scGuessedLetters.has(letter) || scLives <= 0) return;
+            
+            scGuessedLetters.add(letter);
+            if (!scTargetWord.includes(letter)) {
+                scLives--;
+                score = Math.max(0, score - 5);
+                // Shake effect on hangman
+                const svg = document.getElementById('hangman-svg');
+                svg.classList.add('animate-shake');
+                setTimeout(() => svg.classList.remove('animate-shake'), 400);
+            } else {
+                score += 10;
+            }
+            renderHangmanUI();
+        }
+
+        function scramblerHint() {
+            const unrevealed = scTargetWord.split('').filter(char => char !== ' ' && char !== '-' && !scGuessedLetters.has(char));
+            if (unrevealed.length > 0 && scLives > 0) {
+                const randomChar = unrevealed[Math.floor(Math.random() * unrevealed.length)];
+                scGuessedLetters.add(randomChar);
+                score = Math.max(0, score - 15); // Penalty
+                renderHangmanUI();
+            }
+        }
+
+        function scramblerReveal() {
+            scTargetWord.split('').forEach(char => scGuessedLetters.add(char));
+            score = Math.max(0, score - 25);
+            renderHangmanUI();
         }
 
         // --- GAME 3: SENTENCE CLASH LOGIC ---
@@ -1024,7 +1013,6 @@
                 `;
             });
 
-            // Hide example text when generating new words
             document.getElementById('sn-example-box').classList.add('hidden');
             document.getElementById('sn-example-text').textContent = group.example;
         }
@@ -1102,7 +1090,6 @@
         function initReporterGame() {
             repScore = 0;
             repLives = 3;
-            // Initialize fresh deck for 0% repetition
             repDeck = shuffleArray([...reporterData]);
             updateRepUI();
             showView('reporter');
@@ -1124,12 +1111,10 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            // Refill deck if empty
             if (repDeck.length === 0) {
                 repDeck = shuffleArray([...reporterData]);
             }
 
-            // Draw from deck
             currentRepQuestion = repDeck.pop();
 
             document.getElementById('rep-quote').textContent = currentRepQuestion.quote;
@@ -1150,18 +1135,16 @@
         }
 
         function checkRepAnswer(selectedWord, btnElement) {
-            // Disable all buttons immediately
             const allBtns = document.getElementById('rep-options').querySelectorAll('button');
             allBtns.forEach(b => b.disabled = true);
 
             if (selectedWord === currentRepQuestion.answer) {
                 repScore += 1;
-                score = repScore * 10; // 10 points per streak for the final screen
+                score = repScore * 10; 
                 
                 btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
                 btnElement.classList.add('bg-emerald-500', 'text-white', 'shadow-[0_4px_0_#059669]');
                 
-                // Highlight the sentence blank with correct answer
                 document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="text-emerald-400 underline uppercase tracking-wider">${currentRepQuestion.answer}</span>`);
 
                 updateRepUI();
@@ -1172,7 +1155,6 @@
                 btnElement.classList.add('bg-red-500', 'text-white', 'shadow-[0_4px_0_#dc2626]', 'animate-shake');
                 updateRepUI();
 
-                // Find the right button and highlight it for learning
                 allBtns.forEach(b => {
                     if(b.textContent.toLowerCase() === currentRepQuestion.answer.toLowerCase()) {
                         b.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
@@ -1189,7 +1171,7 @@
             }
         }
 
-        // --- GAME 5: RUNNING DICTATION LOGIC (NEW) ---
+        // --- GAME 5: RUNNING DICTATION LOGIC ---
         let dictTeam1Score = 0;
         let dictTeam2Score = 0;
         let dictDeck = [];
@@ -1224,7 +1206,6 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
-            // Hide answer box
             document.getElementById('dict-answer-box').classList.add('hidden');
 
             if (dictDeck.length === 0) {
@@ -1235,7 +1216,6 @@
             
             document.getElementById('dict-quote').textContent = currentDictQuestion.quote;
             
-            // Format the target sentence by filling in the blank with the correct answer
             const filledSentence = currentDictQuestion.sentence.replace('_________', currentDictQuestion.answer);
             document.getElementById('dict-sentence').textContent = filledSentence;
         }
