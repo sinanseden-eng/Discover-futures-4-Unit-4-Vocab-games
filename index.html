@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 4 Vocab Arena</title>
+    <title>Unit 4 Ultimate Arena</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -46,57 +46,30 @@
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
+        @keyframes pulse-fast {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-fast { animation: pulse-fast 0.8s infinite; }
+
         /* Interactive Elements */
-        .game-btn {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .game-btn:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-        .game-btn:active {
-            transform: translateY(2px) scale(0.98);
-        }
+        .game-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .game-btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .game-btn:active { transform: translateY(2px) scale(0.98); }
 
-        .letter-tile {
-            width: 3rem;
-            height: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            border-radius: 0.5rem;
-            user-select: none;
-            text-transform: uppercase;
-        }
-        
-        .letter-tile.empty {
-            background: rgba(255,255,255,0.1);
-            border: 2px dashed rgba(255,255,255,0.3);
-        }
+        .letter-tile { width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; border-radius: 0.5rem; user-select: none; text-transform: uppercase; }
+        .letter-tile.empty { background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); }
+        .letter-tile.filled { background: linear-gradient(to bottom right, #f59e0b, #d97706); color: #fff; border: 2px solid #fbbf24; box-shadow: 0 4px 0 #b45309; }
 
-        .letter-tile.filled {
-            background: linear-gradient(to bottom right, #f59e0b, #d97706);
-            color: #fff;
-            border: 2px solid #fbbf24;
-            box-shadow: 0 4px 0 #b45309;
-        }
+        /* 3D Flip Cards (Prefix Matchmaker) */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
 
         /* Timer Bar */
-        .timer-bar-container {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-        .timer-bar {
-            height: 100%;
-            background: #10b981;
-            transition: width 1s linear, background-color 0.3s;
-        }
+        .timer-bar-container { width: 100%; height: 12px; background: rgba(255, 255, 255, 0.2); border-radius: 6px; overflow: hidden; margin-bottom: 1rem; }
+        .timer-bar { height: 100%; background: #10b981; transition: width 1s linear, background-color 0.3s; }
         .timer-warning { background: #f59e0b; }
         .timer-danger { background: #ef4444; }
 
@@ -108,171 +81,193 @@
 <body class="p-4 md:p-8 flex flex-col items-center justify-center">
 
     <!-- Decorative Orbs -->
-    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 z-[-1]"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 z-[-1]"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 z-[-1]"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 z-[-1]"></div>
 
-    <div class="w-full max-w-5xl">
+    <div class="w-full max-w-7xl">
         
         <!-- DASHBOARD VIEW -->
         <div id="view-dashboard" class="view active animate-pop-in">
-            <div class="text-center mb-12">
-                <span class="bg-indigo-600 text-indigo-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Unit 4 Edition</span>
-                <h1 class="text-5xl md:text-7xl mt-4 mb-4 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500 font-display drop-shadow-lg">Vocab Arena</h1>
-                <p class="text-xl text-indigo-200">Competition, Nature, & The Cold War</p>
+            <div class="text-center mb-10">
+                <span class="bg-indigo-600 text-indigo-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Unit 4 Ultimate Edition</span>
+                <h1 class="text-5xl md:text-7xl mt-4 mb-3 text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-rose-500 font-display drop-shadow-lg">Vocab Arena</h1>
+                <p class="text-lg text-indigo-200">Competition, Nature, & The Cold War</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Game 1 Card -->
-                <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-emerald-400 game-btn">
-                    <div>
-                        <div class="text-5xl mb-4">⏱️</div>
-                        <h2 class="text-2xl text-emerald-300 mb-2 font-display">Speed Run</h2>
-                        <p class="text-slate-300 text-sm mb-6">Match definitions to the correct words fast. Correct answers give bonus time!</p>
+            <!-- CATEGORY 1: VOCAB & PREFIXES -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-display text-white mb-4 border-b-2 border-slate-700 pb-2">🧠 Vocab & Prefixes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Game 1 -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-emerald-400 game-btn cursor-pointer" onclick="startGame('speedrun')">
+                        <div class="text-4xl mb-3">⏱️</div>
+                        <h3 class="text-xl text-emerald-300 font-display mb-2">Speed Run</h3>
+                        <p class="text-slate-300 text-xs mb-4">Match definitions to correct words. Fast!</p>
                     </div>
-                    <button onclick="startGame('speedrun')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#059669] active:shadow-[0_0px_0_#059669] active:translate-y-1 transition-all">Play Now</button>
+                    <!-- Game 2 -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-purple-400 game-btn cursor-pointer" onclick="startGame('scrambler')">
+                        <div class="text-4xl mb-3">🤔</div>
+                        <h3 class="text-xl text-purple-300 font-display mb-2">Hangman</h3>
+                        <p class="text-slate-300 text-xs mb-4">Guess the word letter by letter to survive.</p>
+                    </div>
+                    <!-- Game 3 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-green-400 game-btn cursor-pointer" onclick="startGame('prefix')">
+                        <div class="text-4xl mb-3">🧩</div>
+                        <h3 class="text-xl text-green-300 font-display mb-2">Prefix Matchmaker</h3>
+                        <p class="text-slate-300 text-xs mb-4">Memory matrix! Match prefixes to their meanings.</p>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Game 2 Card (UPDATED TO HANGMAN) -->
-                <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-purple-400 game-btn">
-                    <div>
-                        <div class="text-5xl mb-4">🤔</div>
-                        <h2 class="text-2xl text-purple-300 mb-2 font-display">Hangman</h2>
-                        <p class="text-slate-300 text-sm mb-6">Read the definition and guess the target word letter by letter before you run out of lives.</p>
+            <!-- CATEGORY 2: GRAMMAR & SPEAKING -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-display text-white mb-4 border-b-2 border-slate-700 pb-2">🗣️ Grammar & Speaking</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Game 4 -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-rose-400 game-btn cursor-pointer" onclick="startGame('sentence')">
+                        <div class="text-4xl mb-3">✍️</div>
+                        <h3 class="text-xl text-rose-300 font-display mb-2">Sentence Clash</h3>
+                        <p class="text-slate-300 text-xs mb-4">Team vs Team. Connect 2-3 target words.</p>
                     </div>
-                    <button onclick="startGame('scrambler')" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#4f46e5] active:shadow-[0_0px_0_#4f46e5] active:translate-y-1 transition-all">Play Now</button>
+                    <!-- Game 5 -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-cyan-400 game-btn cursor-pointer" onclick="startGame('reporter')">
+                        <div class="text-4xl mb-3">🎤</div>
+                        <h3 class="text-xl text-cyan-300 font-display mb-2">Reporter's Rush</h3>
+                        <p class="text-slate-300 text-xs mb-4">Pick the correct reporting verb for the quote.</p>
+                    </div>
+                    <!-- Game 6 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-slate-400 game-btn cursor-pointer" onclick="startGame('interrogation')">
+                        <div class="text-4xl mb-3">🕵️‍♂️</div>
+                        <h3 class="text-xl text-slate-300 font-display mb-2">Interrogation Room</h3>
+                        <p class="text-slate-300 text-xs mb-4">Roleplay: Detectives report the suspect's wild alibis.</p>
+                    </div>
+                    <!-- Game 7 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-teal-400 game-btn cursor-pointer" onclick="startGame('truths')">
+                        <div class="text-4xl mb-3">🤥</div>
+                        <h3 class="text-xl text-teal-300 font-display mb-2">Two Truths, One Lie</h3>
+                        <p class="text-slate-300 text-xs mb-4">Report your partner's secrets and guess the lie.</p>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Game 3 Card -->
-                <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-rose-400 game-btn">
-                    <div>
-                        <div class="text-5xl mb-4">✍️</div>
-                        <h2 class="text-2xl text-rose-300 mb-2 font-display">Sentence Clash</h2>
-                        <p class="text-slate-300 text-sm mb-6">Team vs Team. Create a sentence using 2-3 target words together. Teacher scores!</p>
+            <!-- CATEGORY 3: TEAM REVIEW & LIFE SKILLS -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-display text-white mb-4 border-b-2 border-slate-700 pb-2">🚀 Team Review & Life Skills</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Game 8 -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-pink-400 game-btn cursor-pointer" onclick="startGame('dictation')">
+                        <div class="text-4xl mb-3">🏃‍♂️</div>
+                        <h3 class="text-xl text-pink-300 font-display mb-2">Running Dictation</h3>
+                        <p class="text-slate-300 text-xs mb-4">Relay race! Memorize, write, and report.</p>
                     </div>
-                    <button onclick="startGame('sentence')" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#be123c] active:shadow-[0_0px_0_#be123c] active:translate-y-1 transition-all">Play Now</button>
-                </div>
-
-                <!-- Game 4 Card -->
-                <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-cyan-400 game-btn">
-                    <div>
-                        <div class="text-5xl mb-4">🎤</div>
-                        <h2 class="text-2xl text-cyan-300 mb-2 font-display">Reporter's Rush</h2>
-                        <p class="text-slate-300 text-sm mb-6">Grammar Challenge! Pick the correct reporting verb for the direct quote before losing your 3 lives.</p>
+                    <!-- Game 9 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-yellow-400 game-btn cursor-pointer" onclick="startGame('defuse')">
+                        <div class="text-4xl mb-3">💣</div>
+                        <h3 class="text-xl text-yellow-300 font-display mb-2">Defuse the Bomb</h3>
+                        <p class="text-slate-300 text-xs mb-4">Life Skills: Perform under pressure! Cut the right grammar wire.</p>
                     </div>
-                    <button onclick="startGame('reporter')" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#0891b2] active:shadow-[0_0px_0_#0891b2] active:translate-y-1 transition-all">Play Now</button>
-                </div>
-
-                <!-- Game 5 Card -->
-                <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-pink-400 game-btn lg:col-start-2">
-                    <div>
-                        <div class="text-5xl mb-4">🏃‍♂️</div>
-                        <h2 class="text-2xl text-pink-300 mb-2 font-display">Running Dictation</h2>
-                        <p class="text-slate-300 text-sm mb-6">Relay race! Runners memorize a quote, Writers write it down and report it using verbs.</p>
+                    <!-- Game 10 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-orange-400 game-btn cursor-pointer" onclick="startGame('spacerace')">
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h3 class="text-xl text-orange-300 font-display mb-2">Space Race Board</h3>
+                        <p class="text-slate-300 text-xs mb-4">Team USA vs USSR. Answer questions to reach the moon.</p>
                     </div>
-                    <button onclick="startGame('dictation')" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-xl text-lg shadow-[0_4px_0_#be185d] active:shadow-[0_0px_0_#be185d] active:translate-y-1 transition-all">Play Now</button>
+                    <!-- Game 11 (NEW) -->
+                    <div class="glass rounded-3xl p-6 text-center flex flex-col justify-between border-t-4 border-t-indigo-400 game-btn cursor-pointer" onclick="startGame('jeopardy')">
+                        <div class="text-4xl mb-3">📺</div>
+                        <h3 class="text-xl text-indigo-300 font-display mb-2">Unit 4 Jeopardy!</h3>
+                        <p class="text-slate-300 text-xs mb-4">The ultimate quiz show review for all Unit 4 topics.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SPEED RUN VIEW -->
+        <!-- ========================================== -->
+        <!-- VIEW: 1. SPEED RUN -->
+        <!-- ========================================== -->
         <div id="view-speedrun" class="view">
-            <div class="glass rounded-3xl p-6 md:p-10 relative">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
-                    <div class="text-2xl font-display text-amber-400" id="sr-score">Score: 0</div>
+                    <div class="text-2xl font-display text-emerald-400" id="sr-score">Score: 0</div>
                 </div>
-
-                <div class="timer-bar-container">
-                    <div id="sr-timer-bar" class="timer-bar" style="width: 100%;"></div>
-                </div>
+                <div class="timer-bar-container"><div id="sr-timer-bar" class="timer-bar" style="width: 100%;"></div></div>
                 <div class="text-center text-sm font-bold text-slate-300 mb-8 tracking-widest uppercase">Time Left: <span id="sr-time-text" class="text-white">60</span>s</div>
-
                 <div id="sr-play-area" class="animate-pop-in">
                     <div class="bg-indigo-900/50 border border-indigo-500/30 p-8 rounded-2xl mb-8 text-center shadow-inner min-h-[160px] flex flex-col justify-center">
                         <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Definition / Context</span>
                         <h3 id="sr-definition" class="text-xl md:text-3xl font-medium text-white leading-tight"></h3>
                     </div>
-
-                    <div id="sr-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Options generated by JS -->
-                    </div>
+                    <div id="sr-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
         </div>
 
-        <!-- SCRAMBLER / HANGMAN VIEW -->
+        <!-- ========================================== -->
+        <!-- VIEW: 2. HANGMAN -->
+        <!-- ========================================== -->
         <div id="view-scrambler" class="view">
-            <div class="glass rounded-3xl p-6 md:p-10 relative">
-                <div class="flex justify-between items-center mb-4">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
-                    <div class="text-xl font-display text-purple-400" id="sc-progress">Word 1 of 5</div>
+                    <div class="flex items-center gap-6">
+                        <div class="text-xl font-display text-amber-400" id="sc-score">Score: 0</div>
+                        <div class="text-xl font-display text-purple-400" id="sc-progress">Word 1 of 5</div>
+                    </div>
                 </div>
-
                 <div id="sc-play-area" class="animate-pop-in text-center flex flex-col items-center">
-                    
                     <div class="bg-indigo-900/50 border border-indigo-500/30 p-6 rounded-2xl w-full mb-8 shadow-inner">
                         <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Guess the word matching this definition</span>
                         <h3 id="sc-definition" class="text-xl md:text-2xl font-medium text-white leading-tight"></h3>
                     </div>
-
-                    <!-- Hangman Visual -->
                     <div class="w-full flex justify-center mb-6 h-48">
                         <svg id="hangman-svg" viewBox="0 0 200 250" class="w-40 h-48 stroke-white fill-transparent stroke-[4px] stroke-linecap-round stroke-linejoin-round drop-shadow-lg transition-transform duration-200">
-                            <!-- Base (Always visible) -->
                             <line x1="20" y1="230" x2="180" y2="230" stroke="#94a3b8" />
-                            
-                            <!-- Part 1: Scaffold -->
-                            <g id="hm-part-1" style="opacity: 0; transition: opacity 0.3s;">
-                                <line x1="60" y1="230" x2="60" y2="20" />
-                                <line x1="60" y1="20" x2="140" y2="20" />
-                                <line x1="140" y1="20" x2="140" y2="50" />
-                            </g>
-                            <!-- Part 2: Head -->
+                            <g id="hm-part-1" style="opacity: 0; transition: opacity 0.3s;"><line x1="60" y1="230" x2="60" y2="20" /><line x1="60" y1="20" x2="140" y2="20" /><line x1="140" y1="20" x2="140" y2="50" /></g>
                             <circle id="hm-part-2" cx="140" cy="70" r="20" style="opacity: 0; transition: opacity 0.3s;" />
-                            <!-- Part 3: Body -->
                             <line id="hm-part-3" x1="140" y1="90" x2="140" y2="150" style="opacity: 0; transition: opacity 0.3s;" />
-                            <!-- Part 4: Left Arm -->
                             <line id="hm-part-4" x1="140" y1="110" x2="110" y2="140" style="opacity: 0; transition: opacity 0.3s;" />
-                            <!-- Part 5: Right Arm -->
                             <line id="hm-part-5" x1="140" y1="110" x2="170" y2="140" style="opacity: 0; transition: opacity 0.3s;" />
-                            <!-- Part 6: Legs -->
-                            <g id="hm-part-6" style="opacity: 0; transition: opacity 0.3s;">
-                                <line x1="140" y1="150" x2="110" y2="190" />
-                                <line x1="140" y1="150" x2="170" y2="190" />
-                            </g>
+                            <g id="hm-part-6" style="opacity: 0; transition: opacity 0.3s;"><line x1="140" y1="150" x2="110" y2="190" /><line x1="140" y1="150" x2="170" y2="190" /></g>
                         </svg>
                     </div>
-
-                    <!-- Target Word Slots -->
-                    <div class="mb-8 w-full">
-                        <div id="sc-target-slots" class="flex flex-wrap justify-center gap-2 min-h-[3rem]"></div>
-                    </div>
-
-                    <!-- On-Screen Keyboard -->
-                    <div class="w-full max-w-2xl bg-black/20 p-4 md:p-6 rounded-2xl border border-white/5 mb-6">
-                        <div id="sc-letters-pool" class="flex flex-wrap justify-center content-start">
-                            <!-- Letters injected here -->
-                        </div>
-                    </div>
-
-                    <!-- Controls -->
+                    <div class="mb-8 w-full"><div id="sc-target-slots" class="flex flex-wrap justify-center gap-2 min-h-[3rem]"></div></div>
+                    <div class="w-full max-w-2xl bg-black/20 p-4 md:p-6 rounded-2xl border border-white/5 mb-6"><div id="sc-letters-pool" class="flex flex-wrap justify-center content-start"></div></div>
                     <div class="flex gap-4 w-full justify-center">
-                        <button onclick="scramblerHint()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#b45309] active:translate-y-1 active:shadow-none text-sm md:text-base">💡 Hint</button>
-                        <button onclick="scramblerReveal()" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#9f1239] active:translate-y-1 active:shadow-none text-sm md:text-base">👁️ Reveal</button>
+                        <button onclick="scramblerHint()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#b45309] active:translate-y-1 active:shadow-none text-sm md:text-base">💡 Hint (-1 Life)</button>
+                        <button onclick="scramblerReveal()" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#9f1239] active:translate-y-1 active:shadow-none text-sm md:text-base">👁️ Reveal Word</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SENTENCE CLASH VIEW -->
+        <!-- ========================================== -->
+        <!-- VIEW: 3. PREFIX MATCHMAKER (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-prefix" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-5xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-2xl font-display text-green-400" id="px-score">Matches: 0 / 6</div>
+                </div>
+                <div class="text-center mb-6">
+                    <p class="text-slate-300">Match the <strong>Prefix</strong> to its correct <strong>Meaning</strong>.</p>
+                </div>
+                <div id="px-grid" class="grid grid-cols-3 md:grid-cols-4 gap-4 animate-pop-in">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: 4. SENTENCE CLASH -->
+        <!-- ========================================== -->
         <div id="view-sentence" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
                     <div class="text-xl font-display text-rose-400">Team Clash</div>
                 </div>
-
-                <!-- Scoreboard -->
                 <div class="grid grid-cols-2 gap-4 md:gap-8 mb-10">
                     <div class="bg-blue-900/40 border-2 border-blue-500/50 rounded-2xl p-4 text-center shadow-lg">
                         <h3 class="text-blue-300 font-display text-xl mb-1">TEAM A</h3>
@@ -291,8 +286,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Adjustable Timer -->
                 <div class="bg-black/30 border border-white/10 rounded-2xl p-4 mb-8 text-center max-w-md mx-auto shadow-inner">
                     <div class="text-5xl font-display text-white mb-3 tracking-widest" id="sn-timer-display">01:00</div>
                     <div class="flex justify-center items-center gap-4 mb-4">
@@ -306,22 +299,12 @@
                         <button onclick="resetSnTimer()" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-xl transition shadow-[0_3px_0_#475569] active:translate-y-1 active:shadow-none">Reset</button>
                     </div>
                 </div>
-
-                <!-- Word Display -->
                 <div class="text-center">
                     <p class="text-slate-300 font-bold uppercase tracking-widest text-sm mb-6">Target Words to Connect:</p>
-                    
-                    <div id="sn-words-container" class="flex flex-wrap justify-center gap-4 mb-10 min-h-[4rem]">
-                        <!-- Words injected here -->
-                    </div>
-
+                    <div id="sn-words-container" class="flex flex-wrap justify-center gap-4 mb-10 min-h-[4rem]"></div>
                     <div class="bg-black/20 rounded-xl p-4 mb-8 text-sm text-slate-300 border border-white/10 max-w-lg mx-auto">
-                        <strong>Teacher Scoring Guide:</strong><br>
-                        Use 1 Word = +10 pts | Use 2 Words = +20 pts | Use All 3 = +30 pts<br>
-                        <em>Grammar penalty = -5 pts</em>
+                        <strong>Teacher Scoring Guide:</strong><br>Use 1 Word = +10 pts | Use 2 Words = +20 pts | Use All 3 = +30 pts<br><em>Grammar penalty = -5 pts</em>
                     </div>
-
-                    <!-- ADD EXAMPLE SENTENCE REVEAL -->
                     <div class="mb-8 max-w-2xl mx-auto">
                         <button onclick="toggleSentenceExample()" class="text-sm font-bold text-slate-400 hover:text-white underline transition mb-3">Teacher: Show Example Sentence</button>
                         <div id="sn-example-box" class="hidden bg-indigo-900/40 border border-indigo-500/50 p-5 rounded-xl shadow-inner">
@@ -329,69 +312,121 @@
                             <p id="sn-example-text" class="text-white text-lg font-serif italic"></p>
                         </div>
                     </div>
-
-                    <button onclick="nextSentenceWords()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-display text-xl py-4 px-10 rounded-full shadow-[0_5px_0_#b45309] active:shadow-[0_0px_0_#b45309] active:translate-y-1 transition-all">
-                        Draw New Words 🎲
-                    </button>
+                    <button onclick="nextSentenceWords()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-display text-xl py-4 px-10 rounded-full shadow-[0_5px_0_#b45309] active:shadow-[0_0px_0_#b45309] active:translate-y-1 transition-all">Draw New Words 🎲</button>
                 </div>
             </div>
         </div>
 
-        <!-- REPORTER'S RUSH VIEW -->
+        <!-- ========================================== -->
+        <!-- VIEW: 5. REPORTER'S RUSH -->
+        <!-- ========================================== -->
         <div id="view-reporter" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative max-w-3xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
                     <div class="text-2xl font-display text-cyan-400" id="rep-score-display">Streak: 0</div>
                 </div>
-
-                <!-- Lives Indicator -->
                 <div class="text-center mb-4">
                     <p class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Lives Remaining</p>
                     <div class="text-3xl tracking-widest" id="rep-lives">❤️❤️❤️</div>
                 </div>
-
-                <!-- Play Area -->
                 <div id="rep-play-area" class="animate-pop-in mt-8">
-                    
                     <div class="bg-slate-900/80 border border-cyan-500/50 p-8 rounded-2xl mb-8 text-center shadow-xl relative min-h-[220px] flex flex-col justify-center">
                         <span class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-600 text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-lg">Direct Quote</span>
-                        
                         <h3 id="rep-quote" class="text-xl md:text-2xl font-medium text-white leading-relaxed italic mb-6 mt-4 font-serif"></h3>
-                        
                         <div class="bg-black/30 p-4 rounded-xl border border-white/10">
                             <p id="rep-sentence" class="text-cyan-200 font-bold text-lg md:text-xl"></p>
                         </div>
                     </div>
-
-                    <div id="rep-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Options generated by JS -->
-                    </div>
+                    <div id="rep-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
         </div>
 
-        <!-- RUNNING DICTATION VIEW -->
+        <!-- ========================================== -->
+        <!-- VIEW: 6. INTERROGATION ROOM (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-interrogation" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-4xl mx-auto text-center">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-xl font-display text-slate-300">Class Roleplay</div>
+                </div>
+                
+                <h2 class="text-3xl font-display text-white mb-2">🕵️‍♂️ The Interrogation Room</h2>
+                <p class="text-slate-300 mb-8">One Suspect. Three Detectives. Can the detectives report the suspect's alibi correctly?</p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8 text-left">
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-600">
+                        <h3 class="text-rose-400 font-bold uppercase tracking-widest text-sm mb-2">The Suspect</h3>
+                        <p class="text-white text-lg font-serif italic" id="int-suspect-prompt">"I didn't steal the microchip! I was eating a hotdog!"</p>
+                        <button onclick="generateInterrogation()" class="mt-4 text-xs bg-slate-700 hover:bg-slate-600 text-white py-1 px-3 rounded">New Prompt</button>
+                    </div>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-600">
+                        <h3 class="text-cyan-400 font-bold uppercase tracking-widest text-sm mb-2">The Detectives</h3>
+                        <p class="text-slate-300 text-sm mb-2">Listen to the suspect, then report to the Commander using verbs like:</p>
+                        <ul class="text-white font-medium list-disc list-inside">
+                            <li>claimed (that)</li>
+                            <li>denied (verb+ing)</li>
+                            <li>admitted (verb+ing)</li>
+                            <li>refused (to verb)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div class="bg-black/30 border border-white/10 rounded-2xl p-6 text-center max-w-sm mx-auto shadow-inner">
+                    <p class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-2">Interrogation Timer</p>
+                    <div class="text-6xl font-display text-red-500 mb-4 tracking-widest" id="int-timer-display">02:00</div>
+                    <button onclick="startIntTimer()" id="int-btn" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-8 rounded-xl transition shadow-[0_3px_0_#334155] active:translate-y-1 active:shadow-none w-full">Start Interrogation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: 7. TWO TRUTHS, ONE LIE (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-truths" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-3xl mx-auto text-center">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-xl font-display text-teal-400">Icebreaker</div>
+                </div>
+                
+                <h2 class="text-4xl font-display text-white mb-2">🤥 Two Truths & A Lie</h2>
+                <p class="text-slate-300 mb-8">Tell your partner 3 things based on the prompt. They must report it to the class and guess the lie!</p>
+
+                <div class="bg-teal-900/40 border-2 border-teal-500/50 p-8 rounded-2xl shadow-xl mb-8">
+                    <span class="bg-teal-600 text-white text-xs font-bold uppercase tracking-widest py-1 px-3 rounded-full mb-4 inline-block">Topic Prompt</span>
+                    <h3 id="tt-prompt" class="text-2xl md:text-4xl font-black text-white leading-tight mb-6">"Things you did last weekend"</h3>
+                    <button onclick="generateTruthPrompt()" class="bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 px-8 rounded-xl transition shadow-[0_4px_0_#0f766e] active:translate-y-1 active:shadow-none">Generate New Topic</button>
+                </div>
+
+                <div class="text-left bg-black/20 p-6 rounded-xl border border-white/10">
+                    <p class="text-teal-300 font-bold uppercase tracking-widest text-sm mb-3">How to Report:</p>
+                    <p class="text-white italic">"Maria <span class="text-teal-400 font-bold">claimed</span> that she went skydiving, she <span class="text-teal-400 font-bold">stated</span> that she ate a whole pizza, and she <span class="text-teal-400 font-bold">added</span> that she slept for 12 hours. I think she <span class="text-teal-400 font-bold">lied</span> about the skydiving."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: 8. RUNNING DICTATION -->
+        <!-- ========================================== -->
         <div id="view-dictation" class="view">
             <div class="glass rounded-3xl p-6 md:p-10 relative max-w-5xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
                     <div class="text-xl font-display text-pink-400">Running Dictation</div>
                 </div>
-
-                <!-- Rules Section -->
                 <div class="bg-black/30 border border-pink-500/30 rounded-2xl p-5 mb-8">
                     <h3 class="text-pink-400 font-bold uppercase tracking-widest text-sm mb-3">📋 How to Play</h3>
                     <ul class="text-slate-300 text-sm space-y-2 list-decimal list-inside font-medium">
-                        <li>Form two teams at the back of the room. Assign a <strong>Runner</strong> and a <strong>Writer</strong> (rotate these roles!).</li>
-                        <li>The Runner runs to the screen, memorizes the direct quote, and runs back.</li>
-                        <li>The Runner dictates the quote; the Writer writes it down perfectly.</li>
-                        <li>Together, the team must rewrite the quote into a full <strong>Reported Speech</strong> sentence using a reporting verb!</li>
-                        <li>The first team to bring the correct reported sentence to the teacher wins the points.</li>
+                        <li>Teams at back. Assign a <strong>Runner</strong> and a <strong>Writer</strong>.</li>
+                        <li>Runner memorizes the quote on screen, runs back, dictates to Writer.</li>
+                        <li>Team rewrites quote into a <strong>Reported Speech</strong> sentence using a reporting verb!</li>
+                        <li>First team to show the correct sentence to the teacher wins.</li>
                     </ul>
                 </div>
-
-                <!-- Scoreboard -->
                 <div class="grid grid-cols-2 gap-4 md:gap-8 mb-8">
                     <div class="bg-blue-900/40 border-2 border-blue-500/50 rounded-2xl p-4 text-center shadow-lg">
                         <h3 class="text-blue-300 font-display text-xl mb-1">TEAM A</h3>
@@ -410,25 +445,155 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Display Area -->
                 <div id="dict-play-area" class="text-center animate-pop-in">
                     <div class="bg-slate-900/80 border-2 border-pink-500/50 p-8 rounded-2xl mb-6 shadow-xl relative min-h-[150px] flex items-center justify-center">
                         <h3 id="dict-quote" class="text-3xl md:text-5xl font-medium text-white leading-relaxed font-serif"></h3>
                     </div>
-
-                    <!-- Teacher Controls -->
                     <div class="flex flex-col items-center gap-4">
                         <button onclick="toggleDictAnswer()" class="text-slate-400 hover:text-white underline text-sm transition">Teacher: Show Expected Answer</button>
-                        
                         <div id="dict-answer-box" class="hidden bg-emerald-900/40 border border-emerald-500/50 p-4 rounded-xl w-full max-w-2xl">
                             <p class="text-emerald-400 font-bold text-sm uppercase tracking-widest mb-1">Expected Reported Speech:</p>
                             <p id="dict-sentence" class="text-white text-lg md:text-xl font-medium"></p>
                         </div>
+                        <button onclick="nextDictQuote()" class="mt-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-display text-xl py-4 px-10 rounded-full shadow-[0_5px_0_#831843] active:shadow-[0_0px_0_#831843] active:translate-y-1 transition-all">Next Quote 🏃‍♂️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <button onclick="nextDictQuote()" class="mt-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-display text-xl py-4 px-10 rounded-full shadow-[0_5px_0_#831843] active:shadow-[0_0px_0_#831843] active:translate-y-1 transition-all">
-                            Next Quote 🏃‍♂️
-                        </button>
+        <!-- ========================================== -->
+        <!-- VIEW: 9. DEFUSE THE BOMB (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-defuse" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-3xl mx-auto text-center">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-xl font-display text-yellow-400" id="bomb-stage">Bomb 1 of 5</div>
+                </div>
+
+                <div id="bomb-container" class="relative bg-slate-800 border-4 border-slate-600 p-8 rounded-3xl shadow-2xl mb-8 max-w-lg mx-auto">
+                    <!-- Bomb visual -->
+                    <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-6 bg-slate-500 rounded-t-lg"></div>
+                    
+                    <div class="bg-black border-4 border-slate-700 p-4 rounded-xl mb-6 flex justify-center items-center">
+                        <span id="bomb-timer" class="text-6xl font-display text-red-500 tracking-widest animate-pulse-fast">60.0</span>
+                    </div>
+
+                    <div class="bg-yellow-900/50 p-4 rounded-xl border border-yellow-500/30 mb-8 min-h-[100px] flex items-center justify-center">
+                        <p id="bomb-question" class="text-xl font-medium text-white"></p>
+                    </div>
+
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">Cut the correct wire:</p>
+                    <div id="bomb-wires" class="flex flex-col gap-3">
+                        <!-- Wires injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: 10. SPACE RACE BOARD (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-spacerace" class="view">
+            <div class="glass rounded-3xl p-6 md:p-10 relative max-w-6xl mx-auto text-center">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-2xl font-display text-orange-400">Space Race to the Moon</div>
+                </div>
+
+                <!-- The Track -->
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-600 mb-8 overflow-hidden relative">
+                    <!-- Moon Target -->
+                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-6xl drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">🌕</div>
+                    
+                    <!-- Track USA -->
+                    <div class="flex items-center mb-6 border-b border-slate-700 pb-6 relative h-16 w-[90%] border-dashed">
+                        <span class="text-slate-500 font-bold w-16 text-left">USA</span>
+                        <div id="sr-usa" class="text-4xl absolute left-[0%] transition-all duration-500 ease-out z-10" style="transform: translateY(-25%);">🚀</div>
+                    </div>
+                    <!-- Track USSR -->
+                    <div class="flex items-center relative h-16 w-[90%] border-dashed border-b border-slate-700 pb-6">
+                        <span class="text-slate-500 font-bold w-16 text-left">USSR</span>
+                        <div id="sr-ussr" class="text-4xl absolute left-[0%] transition-all duration-500 ease-out z-10" style="transform: translateY(-25%);">🛸</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-500/50">
+                        <h4 class="text-blue-300 font-bold mb-3">USA Controls</h4>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="moveRocket('usa', -1)" class="bg-slate-700 text-white px-3 py-1 rounded">-1</button>
+                            <button onclick="moveRocket('usa', 1)" class="bg-blue-600 text-white px-3 py-1 rounded">+1</button>
+                            <button onclick="moveRocket('usa', 2)" class="bg-blue-500 text-white px-3 py-1 rounded">+2</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <button onclick="drawSpaceCard()" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-display text-xl py-4 px-8 rounded-full shadow-[0_4px_0_#9a3412] active:translate-y-1 active:shadow-none transition-all w-full">Draw Question Card</button>
+                    </div>
+                    <div class="bg-red-900/40 p-4 rounded-xl border border-red-500/50">
+                        <h4 class="text-red-300 font-bold mb-3">USSR Controls</h4>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="moveRocket('ussr', -1)" class="bg-slate-700 text-white px-3 py-1 rounded">-1</button>
+                            <button onclick="moveRocket('ussr', 1)" class="bg-red-600 text-white px-3 py-1 rounded">+1</button>
+                            <button onclick="moveRocket('ussr', 2)" class="bg-red-500 text-white px-3 py-1 rounded">+2</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Modal (Hidden) -->
+                <div id="space-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                    <div class="bg-slate-800 p-8 rounded-3xl border-2 border-orange-500 max-w-lg w-full text-center relative">
+                        <h3 class="text-orange-400 font-bold uppercase tracking-widest text-sm mb-4">Mission Question</h3>
+                        <p id="space-q-text" class="text-white text-2xl font-medium mb-8"></p>
+                        <button onclick="document.getElementById('space-a-text').classList.remove('hidden')" class="bg-slate-700 text-white py-2 px-6 rounded-lg mb-4 hover:bg-slate-600 transition">Reveal Answer</button>
+                        <p id="space-a-text" class="text-emerald-400 text-xl font-bold hidden mb-8"></p>
+                        <button onclick="document.getElementById('space-modal').classList.add('hidden')" class="bg-orange-600 text-white py-2 px-8 rounded-xl font-bold hover:bg-orange-500 transition w-full">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW: 11. UNIT 4 JEOPARDY! (NEW) -->
+        <!-- ========================================== -->
+        <div id="view-jeopardy" class="view">
+            <div class="glass rounded-3xl p-6 md:p-8 relative max-w-6xl mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showView('dashboard')" class="text-slate-400 hover:text-white font-bold tracking-wider text-sm uppercase flex items-center gap-2">← Quit</button>
+                    <div class="text-3xl font-display text-indigo-400">Unit 4 Jeopardy!</div>
+                    <div class="flex gap-6">
+                        <div class="text-xl font-bold text-blue-300">Team A: <span id="jeop-score-a" class="text-white">0</span></div>
+                        <div class="text-xl font-bold text-rose-300">Team B: <span id="jeop-score-b" class="text-white">0</span></div>
+                    </div>
+                </div>
+
+                <!-- Jeopardy Grid -->
+                <div class="bg-blue-950 p-2 rounded-xl border-4 border-blue-800 shadow-2xl overflow-x-auto">
+                    <div id="jeopardy-board" class="min-w-[800px] grid grid-cols-5 gap-2">
+                        <!-- Headers & Cells injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Jeopardy Question Modal (Hidden) -->
+                <div id="jeop-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+                    <div class="bg-blue-900 p-10 rounded-3xl border-4 border-indigo-400 max-w-3xl w-full text-center relative shadow-2xl">
+                        <h3 id="jeop-cat-val" class="text-indigo-300 font-display text-2xl mb-8 uppercase tracking-widest"></h3>
+                        <p id="jeop-q-text" class="text-white text-3xl md:text-5xl font-bold mb-10 leading-tight drop-shadow-md"></p>
+                        
+                        <div id="jeop-answer-area" class="hidden">
+                            <p class="text-emerald-400 text-xl font-bold uppercase tracking-widest mb-2">Answer:</p>
+                            <p id="jeop-a-text" class="text-white text-2xl mb-10 font-medium"></p>
+                            
+                            <p class="text-slate-400 text-sm font-bold uppercase mb-4">Award Points To:</p>
+                            <div class="flex justify-center gap-4">
+                                <button onclick="awardJeopardy(1)" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition text-lg">Team A</button>
+                                <button onclick="awardJeopardy(2)" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-8 rounded-xl transition text-lg">Team B</button>
+                                <button onclick="awardJeopardy(0)" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-3 px-8 rounded-xl transition text-lg">Nobody</button>
+                            </div>
+                        </div>
+
+                        <button id="jeop-reveal-btn" onclick="document.getElementById('jeop-answer-area').classList.remove('hidden'); this.classList.add('hidden');" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-10 rounded-xl transition text-xl shadow-[0_4px_0_#3730a3] active:translate-y-1 active:shadow-none w-full max-w-sm mx-auto">Reveal Answer</button>
                     </div>
                 </div>
             </div>
@@ -445,8 +610,7 @@
                     <span class="text-sm font-bold text-slate-400 uppercase tracking-widest block mb-1">Final Score</span>
                     <span id="results-score" class="text-5xl font-display text-amber-400">0</span>
                 </div>
-
-                <button onclick="showView('dashboard')" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl text-lg shadow-[0_4px_0_#3730a3] active:shadow-[0_0px_0_#3730a3] active:translate-y-1 transition-all">Play Again</button>
+                <button onclick="showView('dashboard')" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-4 rounded-xl text-lg shadow-[0_4px_0_#3730a3] active:translate-y-1 transition-all">Back to Arena</button>
             </div>
         </div>
 
@@ -454,96 +618,29 @@
 
     <!-- SCRIPTS -->
     <script>
-        // --- MASSIVE VOCABULARY DATA BANK (Game 1 & 2) ---
-        // 4 Variations per word to ensure high replayability
+        // ==========================================
+        // SHARED DATA BANKS
+        // ==========================================
         const vocabData = [
             { word: "rivalry", def: "A state of intense competition between two people or groups." },
-            { word: "rivalry", def: "A long-standing conflict or competition, like between Edison and Tesla." },
-            { word: "rivalry", def: "The two sports teams had a fierce _________ that lasted for years." },
-            { word: "rivalry", def: "A situation where two groups are constantly trying to beat each other." },
-            
             { word: "opponent", def: "Someone who competes against or fights another in a contest." },
-            { word: "opponent", def: "The person or team you must defeat in order to win a match." },
-            { word: "opponent", def: "In the final round of the tournament, she faced a very skilled _________." },
-            { word: "opponent", def: "A rival in a game, debate, or argument." },
-            
             { word: "outperform", def: "To perform better or do better than someone else." },
-            { word: "outperform", def: "To beat a rival by working faster, smarter, or more efficiently." },
-            { word: "outperform", def: "Our new technology is designed to _________ all older models." },
-            { word: "outperform", def: "To get higher scores or better results than your competitors." },
-            
             { word: "interspecies", def: "Competition or interaction occurring between DIFFERENT species." },
-            { word: "interspecies", def: "A lion hunting a zebra is an example of _________ interaction." },
-            { word: "interspecies", def: "When two distinct animal groups fight over the exact same food source." },
-            { word: "interspecies", def: "Relationships that cross the boundaries of animal families." },
-            
             { word: "intraspecies", def: "Competition or interaction occurring within the SAME species." },
-            { word: "intraspecies", def: "Two male deer fighting each other for territory is _________ competition." },
-            { word: "intraspecies", def: "Conflicts that happen between members of the identical animal family." },
-            { word: "intraspecies", def: "When birds of the exact same kind fight over the best nesting spots." },
-            
             { word: "coexist", def: "To live in peace at the same time or in the same place." },
-            { word: "coexist", def: "When two different groups share a habitat without destroying each other." },
-            { word: "coexist", def: "Despite their differences, the two communities learned to _________ peacefully." },
-            { word: "coexist", def: "To exist together in harmony." },
-            
             { word: "cooperate", def: "To work together towards a shared goal." },
-            { word: "cooperate", def: "When individuals join forces to achieve something they couldn't do alone." },
-            { word: "cooperate", def: "In a successful team, everyone must _________ in order to win." },
-            { word: "cooperate", def: "To assist someone or comply with their requests." },
-            
             { word: "emigrate", def: "To leave one's own area or country to settle permanently in another." },
-            { word: "emigrate", def: "When an animal species leaves a dying habitat to find a completely new home." },
-            { word: "emigrate", def: "During the terrible drought, the birds had to _________ to find water." },
-            { word: "emigrate", def: "To exit your homeland to live somewhere else." },
-            
             { word: "invasive", def: "A species that spreads quickly and harms the new environment." },
-            { word: "invasive", def: "Rabbits in Australia are an example of this type of destructive species." },
-            { word: "invasive", def: "A plant or animal that takes over a new territory aggressively." },
-            { word: "invasive", def: "Species that are not native and cause ecological damage." },
-            
             { word: "adapt", def: "To change behavior or physical traits to survive in a new environment." },
-            { word: "adapt", def: "What a species must do if its habitat suddenly changes to avoid dying out." },
-            { word: "adapt", def: "Animals in the Arctic had to _________ to the extreme cold by growing thicker fur." },
-            { word: "adapt", def: "To adjust or modify oneself to fit new conditions." },
-            
             { word: "extinction", def: "The state or process of a species dying out completely." },
-            { word: "extinction", def: "What happens when a species fails to adapt and disappears forever." },
-            { word: "extinction", def: "The dinosaurs faced _________ after the massive asteroid hit Earth." },
-            { word: "extinction", def: "When there are no living members of an animal family left." },
-            
             { word: "anxiety", def: "A strong feeling of worry, nervousness, or unease under pressure." },
-            { word: "anxiety", def: "The feeling of intense stress before a big test, speech, or performance." },
-            { word: "anxiety", def: "Many students experience _________ when they have to speak in public." },
-            { word: "anxiety", def: "A psychological state of fear about what might happen." },
-            
             { word: "catalyst", def: "A person or thing that causes an event or change to happen quickly." },
-            { word: "catalyst", def: "The Cold War was a _________ for the rapid invention of the internet." },
-            { word: "catalyst", def: "Something that sparks rapid progress or a sudden reaction." },
-            { word: "catalyst", def: "An agent that provokes or speeds up significant change." },
-            
             { word: "transparent", def: "Open, honest, and easy to understand; without hidden secrets." },
-            { word: "transparent", def: "A system where everyone can clearly see how decisions are made." },
-            { word: "transparent", def: "The government promised to be fully _________ with the public about the budget." },
-            { word: "transparent", def: "The opposite of secretive; letting light and truth pass through." },
-            
             { word: "secrecy", def: "The action of keeping things hidden from others." },
-            { word: "secrecy", def: "The practice of hiding information, often used by spies during the Cold War." },
-            { word: "secrecy", def: "The military project was conducted in absolute _________ so the enemy wouldn't know." },
-            { word: "secrecy", def: "A lack of transparency; maintaining a hidden state." },
-            
             { word: "underperform", def: "To do worse than expected, often due to extreme pressure." },
-            { word: "underperform", def: "When anxiety causes an athlete to fail or play poorly during a big match." },
-            { word: "underperform", def: "If you don't practice enough, you will likely _________ on the final test." },
-            { word: "underperform", def: "To fail to reach the expected standard or level of success." },
-            
-            { word: "battleground", def: "A place where a fight, conflict, or competition happens." },
-            { word: "battleground", def: "The global market became a fierce _________ for the rival tech companies." },
-            { word: "battleground", def: "A literal or figurative arena for a clash between two opponents." },
-            { word: "battleground", def: "The territory where a war or intense debate takes place." }
+            { word: "battleground", def: "A place where a fight, conflict, or competition happens." }
         ];
 
-        // --- SENTENCE GROUPS (Game 3) ---
         const sentenceGroups = [
             { words: ["rivalry", "opponent", "outperform"], example: "The intense rivalry forced the athlete to outperform his opponent." },
             { words: ["interspecies", "coexist", "adapt"], example: "To coexist peacefully, interspecies groups must adapt to each other's needs." },
@@ -555,678 +652,494 @@
             { words: ["adapt", "invasive", "cooperate"], example: "Native animals must cooperate and adapt quickly when an invasive predator arrives." }
         ];
 
-        // --- MASSIVE REPORTER'S RUSH DATA (Game 4) ---
         const reporterData = [
-            // Denied
             { quote: `"I didn't steal the secret documents!"`, sentence: `The spy _________ stealing the documents.`, answer: `denied`, options: [`denied`, `admitted`, `suggested`, `promised`] },
-            { quote: `"It wasn't me who broke the lab equipment."`, sentence: `The scientist _________ breaking the equipment.`, answer: `denied`, options: [`denied`, `warned`, `advised`, `praised`] },
-            { quote: `"I never spoke to the enemy agents."`, sentence: `The official _________ speaking to the enemy.`, answer: `denied`, options: [`denied`, `agreed`, `wondered`, `insisted`] },
-            { quote: `"I absolutely did not cheat on the exam."`, sentence: `The student _________ cheating on the exam.`, answer: `denied`, options: [`denied`, `threatened`, `refused`, `claimed`] },
-            // Advised
             { quote: `"You should really stay inside the safehouse tonight."`, sentence: `The officer _________ him to stay inside.`, answer: `advised`, options: [`advised`, `threatened`, `refused`, `wondered`] },
-            { quote: `"I think you ought to get some rest before the mission."`, sentence: `The doctor _________ her to rest.`, answer: `advised`, options: [`advised`, `denied`, `admitted`, `promised`] },
-            { quote: `"If I were you, I'd review the flight manual again."`, sentence: `The commander _________ us to review the manual.`, answer: `advised`, options: [`advised`, `regretted`, `claimed`, `suggested`] },
-            { quote: `"You should wear a helmet when testing that machine."`, sentence: `She _________ him to wear a helmet.`, answer: `advised`, options: [`advised`, `praised`, `agreed`, `insisted`] },
-            // Promised
             { quote: `"I will absolutely help you build the rocket tomorrow."`, sentence: `The engineer _________ to help build it.`, answer: `promised`, options: [`promised`, `warned`, `denied`, `regretted`] },
-            { quote: `"I swear I will keep your identity a secret."`, sentence: `She _________ to keep the secret.`, answer: `promised`, options: [`promised`, `refused`, `wondered`, `suggested`] },
-            { quote: `"We will definitely send aid to your country next week."`, sentence: `The ally _________ to send aid.`, answer: `promised`, options: [`promised`, `threatened`, `admitted`, `claimed`] },
-            { quote: `"I'll pay you back the money on Friday."`, sentence: `He _________ to pay me back.`, answer: `promised`, options: [`promised`, `advised`, `insisted`, `praised`] },
-            // Warned
             { quote: `"Don't touch that control panel, it's live!"`, sentence: `He _________ me not to touch the panel.`, answer: `warned`, options: [`warned`, `praised`, `admitted`, `decided`] },
-            { quote: `"If you cross the border line, we will shoot."`, sentence: `The guard _________ them not to cross.`, answer: `warned`, options: [`warned`, `agreed`, `regretted`, `suggested`] },
-            { quote: `"Be careful, the ice on the lake is very thin."`, sentence: `She _________ him that the ice was thin.`, answer: `warned`, options: [`warned`, `denied`, `promised`, `wondered`] },
-            { quote: `"Do not open that file, it's a computer virus trap."`, sentence: `The IT agent _________ him not to open the file.`, answer: `warned`, options: [`warned`, `insisted`, `refused`, `claimed`] },
-            // Regretted
             { quote: `"I wish I hadn't missed the historic moon launch."`, sentence: `The scientist _________ missing the launch.`, answer: `regretted`, options: [`regretted`, `praised`, `insisted`, `denied`] },
-            { quote: `"I'm so sorry I sold the company secrets."`, sentence: `He _________ selling the secrets.`, answer: `regretted`, options: [`regretted`, `threatened`, `advised`, `wondered`] },
-            { quote: `"If only I had studied harder for the physics test."`, sentence: `She _________ not studying harder.`, answer: `regretted`, options: [`regretted`, `promised`, `agreed`, `admitted`] },
-            { quote: `"It's a shame we spent so much money on nuclear weapons."`, sentence: `The historian _________ spending so much money.`, answer: `regretted`, options: [`regretted`, `refused`, `warned`, `suggested`] },
-            // Suggested
             { quote: `"Why don't we try planting more trees in the ecosystem?"`, sentence: `The biologist _________ planting more trees.`, answer: `suggested`, options: [`suggested`, `refused`, `warned`, `threatened`] },
-            { quote: `"Let's test the rocket engines one more time."`, sentence: `The expert _________ testing the engines.`, answer: `suggested`, options: [`suggested`, `denied`, `praised`, `promised`] },
-            { quote: `"How about we take a break from the research?"`, sentence: `She _________ taking a break.`, answer: `suggested`, options: [`suggested`, `claimed`, `insisted`, `admitted`] },
-            { quote: `"We could meet at the library to plan the project."`, sentence: `He _________ meeting at the library.`, answer: `suggested`, options: [`suggested`, `regretted`, `advised`, `agreed`] },
-            // Claimed
             { quote: `"My AC design is vastly superior to your DC design."`, sentence: `Tesla _________ that his design was superior.`, answer: `claimed`, options: [`claimed`, `wondered`, `advised`, `threatened`] },
-            { quote: `"I saw a UFO flying over the base last night."`, sentence: `The man _________ to have seen a UFO.`, answer: `claimed`, options: [`claimed`, `refused`, `promised`, `regretted`] },
-            { quote: `"Our computer system is the fastest in the world."`, sentence: `The company _________ that their system was fastest.`, answer: `claimed`, options: [`claimed`, `denied`, `warned`, `praised`] },
-            { quote: `"I have the highest test score in the entire class."`, sentence: `He _________ to have the highest score.`, answer: `claimed`, options: [`claimed`, `suggested`, `insisted`, `admitted`] },
-            // Refused
             { quote: `"I will NOT give you the launch codes!"`, sentence: `The captain _________ to give the codes.`, answer: `refused`, options: [`refused`, `agreed`, `admitted`, `advised`] },
-            { quote: `"I'm not going to fly this unsafe rocket."`, sentence: `Komarov _________ to fly the rocket.`, answer: `refused`, options: [`refused`, `praised`, `wondered`, `promised`] },
-            { quote: `"No, I won't help you cheat on the competition."`, sentence: `She _________ to help him cheat.`, answer: `refused`, options: [`refused`, `threatened`, `regretted`, `claimed`] },
-            { quote: `"I will not sign this unfair contract."`, sentence: `The player _________ to sign the contract.`, answer: `refused`, options: [`refused`, `warned`, `suggested`, `denied`] },
-            // Wondered
             { quote: `"Will we ever find life on Mars?"`, sentence: `The student _________ if they would find life.`, answer: `wondered`, options: [`wondered`, `stated`, `denied`, `refused`] },
-            { quote: `"What time does the satellite pass overhead?"`, sentence: `He _________ what time the satellite passed.`, answer: `wondered`, options: [`wondered`, `insisted`, `promised`, `advised`] },
-            { quote: `"Are they secretly building a new weapon?"`, sentence: `She _________ if they were building a weapon.`, answer: `wondered`, options: [`wondered`, `threatened`, `agreed`, `praised`] },
-            { quote: `"Why is the sky blue on Earth but black on the Moon?"`, sentence: `The child _________ why the sky was blue.`, answer: `wondered`, options: [`wondered`, `regretted`, `claimed`, `admitted`] },
-            // Threatened
             { quote: `"If you cross the border, we will arrest you."`, sentence: `The guard _________ to arrest them.`, answer: `threatened`, options: [`threatened`, `suggested`, `praised`, `agreed`] },
-            { quote: `"Tell me the truth or I'll fire you immediately."`, sentence: `The boss _________ to fire him.`, answer: `threatened`, options: [`threatened`, `wondered`, `denied`, `promised`] },
-            { quote: `"I'll destroy your reputation if you tell anyone."`, sentence: `The rival _________ to destroy her reputation.`, answer: `threatened`, options: [`threatened`, `advised`, `refused`, `claimed`] },
-            { quote: `"Hand over the money, or else!"`, sentence: `The thief _________ to hurt them.`, answer: `threatened`, options: [`threatened`, `regretted`, `admitted`, `insisted`] },
-            // Praised
             { quote: `"You showed incredible bravery on the space mission."`, sentence: `The President _________ the astronaut for his bravery.`, answer: `praised`, options: [`praised`, `warned`, `denied`, `refused`] },
-            { quote: `"Excellent work on the final project, team!"`, sentence: `The manager _________ the team for their work.`, answer: `praised`, options: [`praised`, `threatened`, `wondered`, `suggested`] },
-            { quote: `"You played a fantastic game today."`, sentence: `The coach _________ the player for her game.`, answer: `praised`, options: [`praised`, `claimed`, `agreed`, `promised`] },
-            { quote: `"Your new invention is truly a masterpiece."`, sentence: `The critic _________ the inventor for his masterpiece.`, answer: `praised`, options: [`praised`, `advised`, `regretted`, `admitted`] },
-            // Agreed
             { quote: `"Alright, I'll sign the peace treaty with your country."`, sentence: `The leader _________ to sign the treaty.`, answer: `agreed`, options: [`agreed`, `refused`, `denied`, `wondered`] },
-            { quote: `"Yes, that's a very fair price for the equipment."`, sentence: `The buyer _________ to the price.`, answer: `agreed`, options: [`agreed`, `threatened`, `warned`, `praised`] },
-            { quote: `"Okay, I will help you with the research."`, sentence: `My colleague _________ to help me.`, answer: `agreed`, options: [`agreed`, `insisted`, `suggested`, `claimed`] },
-            { quote: `"Fine, we'll do the experiment your way."`, sentence: `They _________ to do it my way.`, answer: `agreed`, options: [`agreed`, `regretted`, `admitted`, `promised`] },
-            // Insisted
             { quote: `"You must leave the building immediately! I demand it!"`, sentence: `The manager _________ on us leaving.`, answer: `insisted`, options: [`insisted`, `promised`, `regretted`, `agreed`] },
-            { quote: `"I really must pay for dinner tonight."`, sentence: `He _________ on paying for dinner.`, answer: `insisted`, options: [`insisted`, `wondered`, `denied`, `advised`] },
-            { quote: `"It is absolutely necessary that we launch today."`, sentence: `She _________ on launching today.`, answer: `insisted`, options: [`insisted`, `threatened`, `praised`, `refused`] },
-            { quote: `"You have to believe me, the danger is real!"`, sentence: `The spy _________ that he was telling the truth.`, answer: `insisted`, options: [`insisted`, `suggested`, `claimed`, `warned`] },
-            // Admitted
             { quote: `"Yes, it was me who broke the lab equipment."`, sentence: `The technician _________ breaking the equipment.`, answer: `admitted`, options: [`admitted`, `denied`, `threatened`, `advised`] },
-            { quote: `"Okay, I made a mistake in the calculations."`, sentence: `She _________ making a mistake.`, answer: `admitted`, options: [`admitted`, `praised`, `refused`, `promised`] },
-            { quote: `"It's true, we copied their design."`, sentence: `The CEO _________ copying the design.`, answer: `admitted`, options: [`admitted`, `wondered`, `agreed`, `insisted`] },
-            { quote: `"I lied about my age on the application."`, sentence: `He _________ lying about his age.`, answer: `admitted`, options: [`admitted`, `claimed`, `regretted`, `warned`] },
-            // Announced
-            { quote: `"We are going to increase funding for NASA next year."`, sentence: `The politician _________ that they would increase funding.`, answer: `announced`, options: [`announced`, `wondered`, `refused`, `advised`] },
-            { quote: `"The war is officially over!"`, sentence: `The general _________ that the war was over.`, answer: `announced`, options: [`announced`, `denied`, `threatened`, `suggested`] },
-            { quote: `"We have successfully discovered a new planet."`, sentence: `The scientists _________ the discovery.`, answer: `announced`, options: [`announced`, `regretted`, `admitted`, `praised`] },
-            { quote: `"The flight to London is boarding now."`, sentence: `The gate agent _________ that the flight was boarding.`, answer: `announced`, options: [`announced`, `insisted`, `promised`, `agreed`] }
+            { quote: `"We are going to increase funding for NASA next year."`, sentence: `The politician _________ that they would increase funding.`, answer: `announced`, options: [`announced`, `wondered`, `refused`, `advised`] }
         ];
 
-        // --- GLOBAL STATE & DECK MANAGEMENT ---
+        // NEW DATA BANKS
+        const prefixMatchData = [
+            { id: 1, text: "inter-" }, { id: 1, text: "between different groups" },
+            { id: 2, text: "intra-" }, { id: 2, text: "within the same group" },
+            { id: 3, text: "co-" }, { id: 3, text: "together / with" },
+            { id: 4, text: "ex-" }, { id: 4, text: "out / former" },
+            { id: 5, text: "im-" }, { id: 5, text: "not / into" },
+            { id: 6, text: "eco-" }, { id: 6, text: "environment" }
+        ];
+
+        const bombQuestions = [
+            { q: `"I didn't do it!" -> He _____ doing it.`, a: "denied", w1: "advised", w2: "refused", color: "red" },
+            { q: `"You should rest." -> She _____ me to rest.`, a: "advised", w1: "wondered", w2: "claimed", color: "blue" },
+            { q: `"I will help!" -> He _____ to help.`, a: "promised", w1: "admitted", w2: "threatened", color: "green" },
+            { q: `"Don't touch that!" -> He _____ me not to.`, a: "warned", w1: "suggested", w2: "insisted", color: "red" },
+            { q: `"I broke it." -> She _____ breaking it.`, a: "admitted", w1: "regretted", w2: "denied", color: "blue" },
+            { q: `"Let's go." -> He _____ going.`, a: "suggested", w1: "refused", w2: "praised", color: "green" },
+            { q: `"I won't do it." -> She _____ to do it.`, a: "refused", w1: "agreed", w2: "denied", color: "red" }
+        ];
+
+        const jeopardyCategories = [
+            {
+                name: "Cold War",
+                questions: [
+                    { q: "What was the competition for space supremacy between the USA and USSR called?", a: "The Space Race" },
+                    { q: "Who was the first human to journey into outer space?", a: "Yuri Gagarin" },
+                    { q: "What was the name of the first artificial satellite launched by the USSR?", a: "Sputnik" },
+                    { q: "True or False: The Cold War competition was a 'catalyst' for many modern inventions.", a: "True" }
+                ]
+            },
+            {
+                name: "Nature",
+                questions: [
+                    { q: "What do we call a non-native species that spreads quickly and harms the environment?", a: "An invasive species" },
+                    { q: "Competition between members of the SAME species is called what?", a: "Intraspecies competition" },
+                    { q: "To change physical traits to survive in a new environment is to...", a: "Adapt" },
+                    { q: "What happens when a species fails to adapt and dies out completely?", a: "Extinction" }
+                ]
+            },
+            {
+                name: "Vocab",
+                questions: [
+                    { q: "To do worse than expected due to extreme pressure.", a: "Underperform" },
+                    { q: "Being open, honest, and easy to understand (without secrets).", a: "Transparent" },
+                    { q: "To live in peace at the same time or in the same place.", a: "Coexist" },
+                    { q: "A state of intense competition between two people or groups.", a: "Rivalry" }
+                ]
+            },
+            {
+                name: "Grammar",
+                questions: [
+                    { q: "Change to reported speech: 'I didn't steal it!' (Use deny)", a: "He denied stealing it." },
+                    { q: "Change to reported speech: 'You should study more.' (Use advise)", a: "She advised me to study more." },
+                    { q: "Change to reported speech: 'I will definitely call you.' (Use promise)", a: "He promised to call me." },
+                    { q: "Change to reported speech: 'Let's order pizza.' (Use suggest)", a: "She suggested ordering pizza." }
+                ]
+            },
+            {
+                name: "Prefixes",
+                questions: [
+                    { q: "Which prefix means 'between different groups'?", a: "inter-" },
+                    { q: "Which prefix means 'together' or 'with'?", a: "co-" },
+                    { q: "Which prefix means 'environment'?", a: "eco-" },
+                    { q: "Give an example of a word using the prefix 'intra-'.", a: "Intraspecies, intranet, etc." }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // GLOBAL STATE & UTILS
+        // ==========================================
         let currentGame = '';
         let score = 0;
-        let srDeck = [];
-        let repDeck = [];
+        let globalTimerInterval;
 
-        // Utility: Shuffle Array
         function shuffleArray(array) {
             let curId = array.length;
             while (0 !== curId) {
                 let randId = Math.floor(Math.random() * curId);
                 curId -= 1;
-                let tmp = array[curId];
-                array[curId] = array[randId];
-                array[randId] = tmp;
+                let tmp = array[curId]; array[curId] = array[randId]; array[randId] = tmp;
             }
             return array;
         }
 
-        // View Management
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-' + viewId).classList.add('active');
-            
-            // Stop timers if leaving a game
-            if (viewId === 'dashboard') {
-                clearInterval(srTimer);
-                if (typeof snTimerInterval !== 'undefined') clearInterval(snTimerInterval);
-            }
+            clearInterval(globalTimerInterval); // Clear any running game timers
         }
 
         function startGame(type) {
             currentGame = type;
             score = 0;
             if (type === 'speedrun') initSpeedRun();
-            if (type === 'scrambler') initHangman(); // Routed to new Hangman
+            if (type === 'scrambler') initHangman();
             if (type === 'sentence') initSentenceGame();
             if (type === 'reporter') initReporterGame();
             if (type === 'dictation') initDictationGame();
+            if (type === 'prefix') initPrefixMatch();
+            if (type === 'interrogation') initInterrogation();
+            if (type === 'truths') generateTruthPrompt();
+            if (type === 'defuse') initDefuse();
+            if (type === 'spacerace') initSpaceRace();
+            if (type === 'jeopardy') initJeopardy();
+            
+            if(['truths'].includes(type)) showView(type);
         }
 
         function endGame(message) {
-            clearInterval(srTimer);
+            clearInterval(globalTimerInterval);
             document.getElementById('results-message').textContent = message;
             document.getElementById('results-score').textContent = score;
             showView('results');
         }
 
-        // --- GAME 1: SPEED RUN LOGIC ---
-        let srTimeLeft = 60;
-        let srTimer;
-        let srCurrentWord = null;
-
+        // ==========================================
+        // GAME 1: SPEED RUN
+        // ==========================================
+        let srTimeLeft = 60, srCurrentWord = null, srDeck = [];
         function initSpeedRun() {
-            srTimeLeft = 60;
-            score = 0;
-            srDeck = shuffleArray([...vocabData]);
-            updateSrUI();
-            showView('speedrun');
-            nextSrQuestion();
-
-            clearInterval(srTimer);
-            srTimer = setInterval(() => {
-                srTimeLeft--;
-                updateSrUI();
-                if (srTimeLeft <= 0) {
-                    endGame("Time's up! Great effort.");
-                }
+            srTimeLeft = 60; score = 0; srDeck = shuffleArray([...vocabData]);
+            updateSrUI(); showView('speedrun'); nextSrQuestion();
+            globalTimerInterval = setInterval(() => {
+                srTimeLeft--; updateSrUI();
+                if (srTimeLeft <= 0) endGame("Time's up! Great effort.");
             }, 1000);
         }
-
         function updateSrUI() {
             document.getElementById('sr-score').textContent = `Score: ${score}`;
             document.getElementById('sr-time-text').textContent = srTimeLeft;
-            
             const bar = document.getElementById('sr-timer-bar');
-            const percent = (srTimeLeft / 60) * 100;
-            bar.style.width = `${percent}%`;
-            
-            bar.classList.remove('timer-warning', 'timer-danger');
-            if (srTimeLeft <= 20) bar.classList.add('timer-warning');
-            if (srTimeLeft <= 10) bar.classList.add('timer-danger');
+            bar.style.width = `${(srTimeLeft / 60) * 100}%`;
+            bar.className = 'timer-bar ' + (srTimeLeft <= 10 ? 'timer-danger' : srTimeLeft <= 20 ? 'timer-warning' : '');
         }
-
         function nextSrQuestion() {
             const playArea = document.getElementById('sr-play-area');
-            playArea.classList.remove('animate-pop-in');
-            void playArea.offsetWidth; 
-            playArea.classList.add('animate-pop-in');
-
-            if (srDeck.length === 0) {
-                srDeck = shuffleArray([...vocabData]);
-            }
-            
+            playArea.classList.remove('animate-pop-in'); void playArea.offsetWidth; playArea.classList.add('animate-pop-in');
+            if (srDeck.length === 0) srDeck = shuffleArray([...vocabData]);
             srCurrentWord = srDeck.pop();
             
-            const availableWrongWords = vocabData.filter(v => v.word !== srCurrentWord.word);
-            const uniqueWrongWords = [];
-            const usedWords = new Set([srCurrentWord.word]);
-            
-            shuffleArray(availableWrongWords);
-            for (let w of availableWrongWords) {
-                if (!usedWords.has(w.word)) {
-                    uniqueWrongWords.push(w);
-                    usedWords.add(w.word);
-                }
-                if (uniqueWrongWords.length >= 3) break;
-            }
-            
-            const options = shuffleArray([srCurrentWord, ...uniqueWrongWords]);
+            const availableWrong = shuffleArray(vocabData.filter(v => v.word !== srCurrentWord.word));
+            const uniqueWrong = []; const seen = new Set([srCurrentWord.word]);
+            for(let w of availableWrong) { if(!seen.has(w.word)) { uniqueWrong.push(w); seen.add(w.word); } if(uniqueWrong.length>=3) break; }
+            const options = shuffleArray([srCurrentWord, ...uniqueWrong]);
 
             document.getElementById('sr-definition').textContent = srCurrentWord.def;
-            
-            const optionsContainer = document.getElementById('sr-options');
-            optionsContainer.innerHTML = '';
-
-            options.forEach((opt) => {
+            const container = document.getElementById('sr-options'); container.innerHTML = '';
+            options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "bg-white text-indigo-900 font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#cbd5e1] active:shadow-[0_0px_0_#cbd5e1] active:translate-y-1 transition-all capitalize hover:bg-indigo-50";
+                btn.className = "bg-white text-indigo-900 font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#cbd5e1] active:translate-y-1 transition-all capitalize hover:bg-indigo-50";
                 btn.textContent = opt.word;
-                btn.onclick = () => checkSrAnswer(opt.word, btn);
-                optionsContainer.appendChild(btn);
+                btn.onclick = () => {
+                    if(opt.word === srCurrentWord.word) {
+                        score+=10; srTimeLeft = Math.min(60, srTimeLeft+2);
+                        btn.className = "bg-emerald-500 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#059669] capitalize";
+                        updateSrUI(); setTimeout(nextSrQuestion, 400);
+                    } else {
+                        score = Math.max(0, score-5); srTimeLeft = Math.max(0, srTimeLeft-3);
+                        btn.className = "bg-red-500 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#dc2626] capitalize animate-shake opacity-50 cursor-not-allowed";
+                        btn.disabled = true; updateSrUI();
+                        if(srTimeLeft<=0) endGame("Time's up!");
+                    }
+                };
+                container.appendChild(btn);
             });
         }
 
-        function checkSrAnswer(selectedWord, btnElement) {
-            if (selectedWord === srCurrentWord.word) {
-                score += 10;
-                srTimeLeft = Math.min(srTimeLeft + 2, 60); 
-                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
-                btnElement.classList.add('bg-emerald-500', 'text-white', 'shadow-[0_4px_0_#059669]');
-                updateSrUI();
-                setTimeout(nextSrQuestion, 400);
-            } else {
-                score = Math.max(score - 5, 0); 
-                srTimeLeft = Math.max(srTimeLeft - 3, 0); 
-                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
-                btnElement.classList.add('bg-red-500', 'text-white', 'shadow-[0_4px_0_#dc2626]', 'animate-shake');
-                updateSrUI();
-                
-                btnElement.disabled = true;
-                btnElement.classList.add('opacity-50', 'cursor-not-allowed');
-                
-                if(srTimeLeft <= 0) endGame("Time's up! Watch out for penalties.");
-            }
-        }
-
-        // --- GAME 2: HANGMAN LOGIC (Formerly Scrambler) ---
-        let scWords = [];
-        let scCurrentIndex = 0;
-        let scTargetWord = '';
-        let scGuessedLetters = new Set();
-        let scLives = 6;
+        // ==========================================
+        // GAME 2: HANGMAN
+        // ==========================================
+        let scWords = [], scCurrentIndex = 0, scTargetWord = '', scGuessedLetters = new Set(), scLives = 6;
         const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
-
+        
         function initHangman() {
-            score = 0;
-            scCurrentIndex = 0;
-            
-            // Get 5 unique words
-            const uniqueSet = [];
-            const seenWords = new Set();
-            const shuffledFull = shuffleArray([...vocabData]);
-            
-            for(let item of shuffledFull) {
-                if(!seenWords.has(item.word)) {
-                    seenWords.add(item.word);
-                    uniqueSet.push(item);
-                }
-                if(uniqueSet.length >= 5) break;
-            }
+            score = 0; scCurrentIndex = 0;
+            const uniqueSet = []; const seen = new Set();
+            for(let item of shuffleArray([...vocabData])) { if(!seen.has(item.word)){ seen.add(item.word); uniqueSet.push(item); } if(uniqueSet.length>=5) break; }
             scWords = uniqueSet;
-            
-            showView('scrambler');
-            loadHangmanLevel();
+            showView('scrambler'); loadHangmanLevel();
         }
-
         function loadHangmanLevel() {
-            if (scCurrentIndex >= scWords.length) {
-                // Fixed bonus since timer is removed
-                score += 100;
-                endGame("You survived the Hangman Challenge!");
-                return;
-            }
-
-            document.getElementById('sc-progress').textContent = `Word ${scCurrentIndex + 1} of ${scWords.length}`;
-            
-            const currentObj = scWords[scCurrentIndex];
-            scTargetWord = currentObj.word.toUpperCase();
-            scGuessedLetters.clear();
-            scLives = 6;
-            
-            document.getElementById('sc-definition').textContent = currentObj.def;
-
-            const playArea = document.getElementById('sc-play-area');
-            playArea.classList.remove('animate-pop-in');
-            void playArea.offsetWidth; 
-            playArea.classList.add('animate-pop-in');
-
+            if (scCurrentIndex >= scWords.length) { score += 100; endGame("You survived the Hangman Challenge!"); return; }
+            document.getElementById('sc-progress').textContent = `Word ${scCurrentIndex + 1} of 5`;
+            document.getElementById('sc-score').textContent = `Score: ${score}`;
+            const obj = scWords[scCurrentIndex]; scTargetWord = obj.word.toUpperCase(); scGuessedLetters.clear(); scLives = 6;
+            document.getElementById('sc-definition').textContent = obj.def;
+            document.getElementById('sc-play-area').classList.remove('animate-pop-in'); void document.getElementById('sc-play-area').offsetWidth; document.getElementById('sc-play-area').classList.add('animate-pop-in');
             renderHangmanUI();
         }
-
         function renderHangmanUI() {
-            const slotsContainer = document.getElementById('sc-target-slots');
-            const poolContainer = document.getElementById('sc-letters-pool');
-            
-            // Render Slots
-            slotsContainer.innerHTML = '';
+            document.getElementById('sc-score').textContent = `Score: ${score}`;
+            const slotsContainer = document.getElementById('sc-target-slots'); slotsContainer.innerHTML = '';
             let allRevealed = true;
-            
             for (let char of scTargetWord) {
                 const slot = document.createElement('div');
-                if (char === ' ' || char === '-') {
-                    slot.className = `letter-tile empty border-none bg-transparent`;
-                    slot.textContent = char;
-                } else if (scGuessedLetters.has(char)) {
-                    slot.className = `letter-tile filled`;
-                    slot.textContent = char;
-                } else {
-                    slot.className = `letter-tile empty`;
-                    slot.textContent = '';
-                    allRevealed = false;
-                }
+                if (char === ' ' || char === '-') { slot.className = "letter-tile empty border-none bg-transparent"; slot.textContent = char; }
+                else if (scGuessedLetters.has(char)) { slot.className = "letter-tile filled"; slot.textContent = char; }
+                else { slot.className = "letter-tile empty"; slot.textContent = ''; allRevealed = false; }
                 slotsContainer.appendChild(slot);
             }
-
-            // Render Keyboard
-            poolContainer.innerHTML = '';
-            ALPHABET.forEach(letter => {
+            const poolContainer = document.getElementById('sc-letters-pool'); poolContainer.innerHTML = '';
+            ALPHABET.forEach(l => {
                 const btn = document.createElement('button');
-                const isGuessed = scGuessedLetters.has(letter);
-                
-                btn.className = `w-10 h-12 m-1 font-bold rounded shadow-sm text-lg transition-all ${
-                    isGuessed 
-                        ? (scTargetWord.includes(letter) 
-                            ? 'bg-emerald-500 text-white opacity-50 cursor-not-allowed shadow-none' 
-                            : 'bg-red-500 text-white opacity-50 cursor-not-allowed shadow-none') 
-                        : 'bg-white text-indigo-900 hover:bg-indigo-100 hover:scale-105 active:scale-95 border-b-2 border-slate-300'
-                }`;
-                btn.textContent = letter;
-                btn.disabled = isGuessed || scLives <= 0 || allRevealed;
-                if (!btn.disabled) {
-                    btn.onclick = () => guessLetter(letter);
-                }
+                const isGuessed = scGuessedLetters.has(l);
+                btn.className = `w-10 h-12 m-1 font-bold rounded shadow-sm text-lg transition-all ${isGuessed ? (scTargetWord.includes(l)?'bg-emerald-500 text-white opacity-50 cursor-not-allowed shadow-none':'bg-red-500 text-white opacity-50 cursor-not-allowed shadow-none') : 'bg-white text-indigo-900 hover:bg-indigo-100 active:scale-95 border-b-2 border-slate-300'}`;
+                btn.textContent = l; btn.disabled = isGuessed || scLives<=0 || allRevealed;
+                if(!btn.disabled) btn.onclick = () => { scGuessedLetters.add(l); if(!scTargetWord.includes(l)){ scLives--; score=Math.max(0,score-5); document.getElementById('hangman-svg').classList.add('animate-shake'); setTimeout(()=>document.getElementById('hangman-svg').classList.remove('animate-shake'),400); }else{ score+=10; } renderHangmanUI(); };
                 poolContainer.appendChild(btn);
             });
-
-            // Update Hangman SVG Parts
-            for(let i=1; i<=6; i++) {
-                const part = document.getElementById(`hm-part-${i}`);
-                if (part) {
-                    part.style.opacity = (6 - scLives >= i) ? '1' : '0';
-                }
-            }
-
-            // Check Win/Loss states
+            for(let i=1; i<=6; i++) { const part = document.getElementById(`hm-part-${i}`); if(part) part.style.opacity = (6 - scLives >= i) ? '1' : '0'; }
             if (allRevealed) {
-                score += 50;
-                const slots = slotsContainer.children;
-                for(let s of slots) {
-                    if(s.classList.contains('filled')) {
-                        s.style.background = "linear-gradient(to bottom right, #10b981, #059669)";
-                        s.style.borderColor = "#34d399";
-                        s.style.boxShadow = "0 4px 0 #047857";
-                    }
-                }
-                setTimeout(() => {
-                    scCurrentIndex++;
-                    loadHangmanLevel();
-                }, 1200);
+                score += 50; Array.from(slotsContainer.children).forEach(s => { if(s.classList.contains('filled')) { s.style.background="linear-gradient(to bottom right, #10b981, #059669)"; s.style.borderColor="#34d399"; s.style.boxShadow="0 4px 0 #047857"; }});
+                setTimeout(()=>{scCurrentIndex++; loadHangmanLevel();}, 1200);
             } else if (scLives <= 0) {
-                // Reveal the word in red
                 slotsContainer.innerHTML = '';
-                for (let char of scTargetWord) {
-                    const slot = document.createElement('div');
-                    slot.className = `letter-tile filled`;
-                    slot.style.background = "linear-gradient(to bottom right, #ef4444, #b91c1c)";
-                    slot.style.borderColor = "#fca5a5";
-                    slot.style.boxShadow = "0 4px 0 #7f1d1d";
-                    slot.textContent = char;
-                    slotsContainer.appendChild(slot);
-                }
-                setTimeout(() => {
-                    scCurrentIndex++;
-                    loadHangmanLevel();
-                }, 2000);
+                for (let char of scTargetWord) { const slot = document.createElement('div'); slot.className = "letter-tile filled"; slot.style.background="linear-gradient(to bottom right, #ef4444, #b91c1c)"; slot.style.borderColor="#fca5a5"; slot.style.boxShadow="0 4px 0 #7f1d1d"; slot.textContent = char; slotsContainer.appendChild(slot); }
+                setTimeout(()=>{scCurrentIndex++; loadHangmanLevel();}, 2000);
             }
         }
-
-        function guessLetter(letter) {
-            if (scGuessedLetters.has(letter) || scLives <= 0) return;
-            
-            scGuessedLetters.add(letter);
-            if (!scTargetWord.includes(letter)) {
-                scLives--;
-                score = Math.max(0, score - 5);
-                // Shake effect on hangman
-                const svg = document.getElementById('hangman-svg');
-                svg.classList.add('animate-shake');
-                setTimeout(() => svg.classList.remove('animate-shake'), 400);
-            } else {
-                score += 10;
-            }
-            renderHangmanUI();
-        }
-
         function scramblerHint() {
             const unrevealed = scTargetWord.split('').filter(char => char !== ' ' && char !== '-' && !scGuessedLetters.has(char));
-            if (unrevealed.length > 0 && scLives > 0) {
-                const randomChar = unrevealed[Math.floor(Math.random() * unrevealed.length)];
-                scGuessedLetters.add(randomChar);
-                score = Math.max(0, score - 15); // Penalty
+            if (unrevealed.length > 0 && scLives > 1) {
+                scGuessedLetters.add(unrevealed[Math.floor(Math.random() * unrevealed.length)]);
+                scLives--; score = Math.max(0, score - 10);
+                document.getElementById('hangman-svg').classList.add('animate-shake'); setTimeout(() => document.getElementById('hangman-svg').classList.remove('animate-shake'), 400);
                 renderHangmanUI();
-            }
+            } else if (scLives <= 1) { alert("You need more than 1 life to use a hint!"); }
         }
+        function scramblerReveal() { scTargetWord.split('').forEach(c => scGuessedLetters.add(c)); score = Math.max(0, score - 25); renderHangmanUI(); }
 
-        function scramblerReveal() {
-            scTargetWord.split('').forEach(char => scGuessedLetters.add(char));
-            score = Math.max(0, score - 25);
-            renderHangmanUI();
-        }
-
-        // --- GAME 3: SENTENCE CLASH LOGIC ---
-        let team1Score = 0;
-        let team2Score = 0;
-
-        let snTimerInterval;
-        let snInitialTime = 60; 
-        let snTimeLeft = 60;
-        let snIsRunning = false;
-
-        function initSentenceGame() {
-            team1Score = 0;
-            team2Score = 0;
-            updateScoreboard();
-            resetSnTimer();
-            showView('sentence');
-            nextSentenceWords();
-        }
-
-        function updateTeamScore(team, amount) {
-            if (team === 1) {
-                team1Score = Math.max(0, team1Score + amount);
-            } else {
-                team2Score = Math.max(0, team2Score + amount);
-            }
-            updateScoreboard();
-        }
-
-        function updateScoreboard() {
-            document.getElementById('team1-score').innerText = team1Score;
-            document.getElementById('team2-score').innerText = team2Score;
-        }
-
-        function nextSentenceWords() {
-            const group = sentenceGroups[Math.floor(Math.random() * sentenceGroups.length)];
-            const container = document.getElementById('sn-words-container');
-            
-            container.classList.remove('animate-pop-in');
-            void container.offsetWidth; 
-            container.classList.add('animate-pop-in');
-            
-            container.innerHTML = '';
-            
-            group.words.forEach((word, i) => {
-                const colors = [
-                    "from-teal-400 to-emerald-600 border-emerald-300", 
-                    "from-fuchsia-400 to-purple-600 border-purple-300", 
-                    "from-amber-300 to-orange-500 border-orange-300"
-                ];
-                const color = colors[i % colors.length];
-
-                container.innerHTML += `
-                    <div class="bg-gradient-to-br ${color} text-white px-6 py-4 rounded-2xl border-2 shadow-xl transform transition hover:scale-105 cursor-default">
-                        <span class="text-3xl font-black tracking-widest uppercase">${word}</span>
+        // ==========================================
+        // GAME 3: PREFIX MATCHMAKER
+        // ==========================================
+        let pxFlipped = [], pxMatches = 0;
+        function initPrefixMatch() {
+            pxMatches = 0; pxFlipped = []; showView('prefix');
+            document.getElementById('px-score').textContent = `Matches: 0 / 6`;
+            const grid = document.getElementById('px-grid'); grid.innerHTML = '';
+            shuffleArray([...prefixMatchData]).forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "perspective-1000 w-full h-32 cursor-pointer";
+                card.innerHTML = `
+                    <div class="relative w-full h-full transform-style-3d transition-transform duration-500" id="px-card-inner-${index}" data-id="${item.id}">
+                        <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-green-500 to-emerald-700 rounded-xl border-2 border-emerald-400 shadow-lg flex items-center justify-center text-4xl">❓</div>
+                        <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-white rounded-xl border-2 border-slate-200 shadow-lg flex items-center justify-center p-2 text-center">
+                            <span class="text-indigo-900 font-bold ${item.text.length > 15 ? 'text-sm' : 'text-xl'}">${item.text}</span>
+                        </div>
                     </div>
                 `;
+                card.onclick = () => handlePxClick(index);
+                grid.appendChild(card);
             });
-
-            document.getElementById('sn-example-box').classList.add('hidden');
-            document.getElementById('sn-example-text').textContent = group.example;
         }
-
-        function toggleSentenceExample() {
-            const box = document.getElementById('sn-example-box');
-            if (box.classList.contains('hidden')) {
-                box.classList.remove('hidden');
-            } else {
-                box.classList.add('hidden');
-            }
-        }
-
-        function updateSnTimerDisplay() {
-            const mins = Math.floor(snTimeLeft / 60).toString().padStart(2, '0');
-            const secs = (snTimeLeft % 60).toString().padStart(2, '0');
-            const display = document.getElementById('sn-timer-display');
-            display.innerText = `${mins}:${secs}`;
+        function handlePxClick(index) {
+            const inner = document.getElementById(`px-card-inner-${index}`);
+            if (pxFlipped.length >= 2 || inner.classList.contains('rotate-y-180') || inner.classList.contains('matched')) return;
             
-            if (snTimeLeft <= 10 && snTimeLeft > 0) {
-                display.classList.add('text-red-500');
-                display.classList.remove('text-white');
-            } else {
-                display.classList.remove('text-red-500');
-                display.classList.add('text-white');
-            }
-        }
-
-        function adjustSnTimer(amount) {
-            if (!snIsRunning) {
-                snInitialTime = Math.max(10, snInitialTime + amount); 
-                snTimeLeft = snInitialTime;
-                updateSnTimerDisplay();
-            }
-        }
-
-        function startSnTimer() {
-            if (!snIsRunning && snTimeLeft > 0) {
-                snIsRunning = true;
-                snTimerInterval = setInterval(() => {
-                    snTimeLeft--;
-                    updateSnTimerDisplay();
-                    if (snTimeLeft <= 0) {
-                        clearInterval(snTimerInterval);
-                        snIsRunning = false;
-                        const display = document.getElementById('sn-timer-display');
-                        display.innerText = "TIME'S UP!";
-                        display.classList.add('text-red-500', 'animate-shake');
-                        setTimeout(() => display.classList.remove('animate-shake'), 500);
-                    }
-                }, 1000);
-            }
-        }
-
-        function pauseSnTimer() {
-            snIsRunning = false;
-            clearInterval(snTimerInterval);
-        }
-
-        function resetSnTimer() {
-            snIsRunning = false;
-            clearInterval(snTimerInterval);
-            snTimeLeft = snInitialTime;
-            const display = document.getElementById('sn-timer-display');
-            display.classList.remove('animate-shake', 'text-red-500');
-            display.classList.add('text-white');
-            updateSnTimerDisplay();
-        }
-
-        // --- GAME 4: REPORTER'S RUSH LOGIC ---
-        let repScore = 0;
-        let repLives = 3;
-        let currentRepQuestion = null;
-
-        function initReporterGame() {
-            repScore = 0;
-            repLives = 3;
-            repDeck = shuffleArray([...reporterData]);
-            updateRepUI();
-            showView('reporter');
-            nextRepQuestion();
-        }
-
-        function updateRepUI() {
-            document.getElementById('rep-score-display').textContent = `Streak: ${repScore}`;
-            let hearts = '';
-            for(let i=0; i<3; i++) {
-                hearts += i < repLives ? '❤️' : '🖤';
-            }
-            document.getElementById('rep-lives').textContent = hearts;
-        }
-
-        function nextRepQuestion() {
-            const playArea = document.getElementById('rep-play-area');
-            playArea.classList.remove('animate-pop-in');
-            void playArea.offsetWidth; 
-            playArea.classList.add('animate-pop-in');
-
-            if (repDeck.length === 0) {
-                repDeck = shuffleArray([...reporterData]);
-            }
-
-            currentRepQuestion = repDeck.pop();
-
-            document.getElementById('rep-quote').textContent = currentRepQuestion.quote;
-            document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="border-b-2 border-cyan-400 px-4 py-1 text-white inline-block min-w-[100px] text-center">_________</span>`);
-
-            const optionsContainer = document.getElementById('rep-options');
-            optionsContainer.innerHTML = '';
-
-            const shuffledOptions = shuffleArray([...currentRepQuestion.options]);
-
-            shuffledOptions.forEach((opt) => {
-                const btn = document.createElement('button');
-                btn.className = "bg-white text-indigo-900 font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#cbd5e1] active:shadow-[0_0px_0_#cbd5e1] active:translate-y-1 transition-all capitalize hover:bg-cyan-50";
-                btn.textContent = opt;
-                btn.onclick = () => checkRepAnswer(opt, btn);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function checkRepAnswer(selectedWord, btnElement) {
-            const allBtns = document.getElementById('rep-options').querySelectorAll('button');
-            allBtns.forEach(b => b.disabled = true);
-
-            if (selectedWord === currentRepQuestion.answer) {
-                repScore += 1;
-                score = repScore * 10; 
-                
-                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
-                btnElement.classList.add('bg-emerald-500', 'text-white', 'shadow-[0_4px_0_#059669]');
-                
-                document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="text-emerald-400 underline uppercase tracking-wider">${currentRepQuestion.answer}</span>`);
-
-                updateRepUI();
-                setTimeout(nextRepQuestion, 1200);
-            } else {
-                repLives--;
-                btnElement.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
-                btnElement.classList.add('bg-red-500', 'text-white', 'shadow-[0_4px_0_#dc2626]', 'animate-shake');
-                updateRepUI();
-
-                allBtns.forEach(b => {
-                    if(b.textContent.toLowerCase() === currentRepQuestion.answer.toLowerCase()) {
-                        b.classList.remove('bg-white', 'text-indigo-900', 'shadow-[0_4px_0_#cbd5e1]');
-                        b.classList.add('bg-emerald-500', 'text-white', 'shadow-[0_4px_0_#059669]');
-                    }
-                });
-
-                if(repLives <= 0) {
-                    score = repScore * 10;
-                    setTimeout(() => endGame(`Out of lives! Your final grammar streak was ${repScore}.`), 1500);
+            inner.classList.add('rotate-y-180'); pxFlipped.push({ idx: index, id: inner.dataset.id, el: inner });
+            
+            if (pxFlipped.length === 2) {
+                if (pxFlipped[0].id === pxFlipped[1].id) {
+                    pxMatches++; document.getElementById('px-score').textContent = `Matches: ${pxMatches} / 6`;
+                    pxFlipped.forEach(f => f.el.classList.add('matched'));
+                    pxFlipped = [];
+                    if (pxMatches === 6) setTimeout(() => { score=100; endGame("Memory Master!"); }, 1000);
                 } else {
-                    setTimeout(nextRepQuestion, 2000);
+                    setTimeout(() => { pxFlipped.forEach(f => f.el.classList.remove('rotate-y-180')); pxFlipped = []; }, 1200);
                 }
             }
         }
 
-        // --- GAME 5: RUNNING DICTATION LOGIC ---
-        let dictTeam1Score = 0;
-        let dictTeam2Score = 0;
-        let dictDeck = [];
-        let currentDictQuestion = null;
+        // ==========================================
+        // GAME 4: SENTENCE CLASH
+        // ==========================================
+        let team1Score = 0, team2Score = 0, snTimeLeft = 60, snInitial = 60, snIsRunning = false;
+        function initSentenceGame() { team1Score=0; team2Score=0; updateScoreboard(); resetSnTimer(); showView('sentence'); nextSentenceWords(); }
+        function updateTeamScore(team, amt) { team===1 ? team1Score=Math.max(0,team1Score+amt) : team2Score=Math.max(0,team2Score+amt); updateScoreboard(); }
+        function updateScoreboard() { document.getElementById('team1-score').innerText = team1Score; document.getElementById('team2-score').innerText = team2Score; }
+        function nextSentenceWords() {
+            const group = sentenceGroups[Math.floor(Math.random()*sentenceGroups.length)];
+            const container = document.getElementById('sn-words-container'); container.innerHTML = '';
+            group.words.forEach((w, i) => {
+                const cols = ["from-teal-400 to-emerald-600 border-emerald-300", "from-fuchsia-400 to-purple-600 border-purple-300", "from-amber-300 to-orange-500 border-orange-300"];
+                container.innerHTML += `<div class="bg-gradient-to-br ${cols[i%3]} text-white px-6 py-4 rounded-2xl border-2 shadow-xl transform transition hover:scale-105 cursor-default"><span class="text-3xl font-black tracking-widest uppercase">${w}</span></div>`;
+            });
+            document.getElementById('sn-example-box').classList.add('hidden'); document.getElementById('sn-example-text').textContent = group.example;
+        }
+        function toggleSentenceExample() { document.getElementById('sn-example-box').classList.toggle('hidden'); }
+        function updateSnTimerDisplay() {
+            const d = document.getElementById('sn-timer-display');
+            d.innerText = `${Math.floor(snTimeLeft/60).toString().padStart(2,'0')}:${(snTimeLeft%60).toString().padStart(2,'0')}`;
+            if(snTimeLeft<=10 && snTimeLeft>0) { d.classList.add('text-red-500'); d.classList.remove('text-white'); } else { d.classList.remove('text-red-500'); d.classList.add('text-white'); }
+        }
+        function adjustSnTimer(amt) { if(!snIsRunning) { snInitial=Math.max(10,snInitial+amt); snTimeLeft=snInitial; updateSnTimerDisplay(); } }
+        function startSnTimer() { if(!snIsRunning && snTimeLeft>0) { snIsRunning=true; globalTimerInterval=setInterval(()=>{ snTimeLeft--; updateSnTimerDisplay(); if(snTimeLeft<=0) { clearInterval(globalTimerInterval); snIsRunning=false; const d=document.getElementById('sn-timer-display'); d.innerText="TIME'S UP!"; d.classList.add('text-red-500','animate-shake'); setTimeout(()=>d.classList.remove('animate-shake'),500); }}, 1000); } }
+        function pauseSnTimer() { snIsRunning=false; clearInterval(globalTimerInterval); }
+        function resetSnTimer() { snIsRunning=false; clearInterval(globalTimerInterval); snTimeLeft=snInitial; const d=document.getElementById('sn-timer-display'); d.classList.remove('animate-shake','text-red-500'); d.classList.add('text-white'); updateSnTimerDisplay(); }
 
-        function initDictationGame() {
-            dictTeam1Score = 0;
-            dictTeam2Score = 0;
-            updateDictScoreboard();
-            dictDeck = shuffleArray([...reporterData]);
-            showView('dictation');
-            nextDictQuote();
+        // ==========================================
+        // GAME 5: REPORTER'S RUSH
+        // ==========================================
+        let repScore = 0, repLives = 3, currentRepQuestion = null, repDeck = [];
+        function initReporterGame() { repScore = 0; repLives = 3; repDeck = shuffleArray([...reporterData]); updateRepUI(); showView('reporter'); nextRepQuestion(); }
+        function updateRepUI() { document.getElementById('rep-score-display').textContent = `Streak: ${repScore}`; document.getElementById('rep-lives').textContent = '❤️'.repeat(repLives) + '🖤'.repeat(3-repLives); }
+        function nextRepQuestion() {
+            if(repDeck.length===0) repDeck = shuffleArray([...reporterData]);
+            currentRepQuestion = repDeck.pop();
+            document.getElementById('rep-quote').textContent = currentRepQuestion.quote;
+            document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="border-b-2 border-cyan-400 px-4 py-1 text-white inline-block min-w-[100px] text-center">_________</span>`);
+            const container = document.getElementById('rep-options'); container.innerHTML = '';
+            shuffleArray([...currentRepQuestion.options]).forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white text-indigo-900 font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#cbd5e1] active:translate-y-1 transition-all capitalize hover:bg-cyan-50";
+                btn.textContent = opt; btn.onclick = () => {
+                    Array.from(container.children).forEach(b=>b.disabled=true);
+                    if(opt===currentRepQuestion.answer) { repScore++; score=repScore*10; btn.className="bg-emerald-500 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#059669] capitalize"; document.getElementById('rep-sentence').innerHTML = currentRepQuestion.sentence.replace('_________', `<span class="text-emerald-400 underline uppercase tracking-wider">${opt}</span>`); updateRepUI(); setTimeout(nextRepQuestion, 1200); }
+                    else { repLives--; btn.className="bg-red-500 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#dc2626] capitalize animate-shake"; updateRepUI(); Array.from(container.children).forEach(b=>{if(b.textContent===currentRepQuestion.answer) b.className="bg-emerald-500 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-[0_4px_0_#059669] capitalize";}); if(repLives<=0){ score=repScore*10; setTimeout(()=>endGame(`Out of lives! Streak: ${repScore}`), 1500); } else { setTimeout(nextRepQuestion, 2000); } }
+                };
+                container.appendChild(btn);
+            });
         }
 
-        function updateDictScore(team, amount) {
-            if (team === 1) {
-                dictTeam1Score = Math.max(0, dictTeam1Score + amount);
-            } else {
-                dictTeam2Score = Math.max(0, dictTeam2Score + amount);
-            }
-            updateDictScoreboard();
+        // ==========================================
+        // GAME 6: INTERROGATION ROOM
+        // ==========================================
+        let intTimeLeft = 120, intIsRunning = false;
+        const alibis = ["I was eating a hotdog at the park!", "I was sleeping in my car!", "I was walking my neighbor's cat!", "I was stuck in an elevator!"];
+        const crimes = ["steal the microchip", "break the satellite", "leak the secret plans", "eat the commander's lunch"];
+        function initInterrogation() { showView('interrogation'); generateInterrogation(); intTimeLeft=120; updateIntTimer(); intIsRunning=false; document.getElementById('int-btn').textContent="Start Interrogation"; }
+        function generateInterrogation() { document.getElementById('int-suspect-prompt').textContent = `"I didn't ${crimes[Math.floor(Math.random()*crimes.length)]}! ${alibis[Math.floor(Math.random()*alibis.length)]}"`; }
+        function updateIntTimer() { document.getElementById('int-timer-display').innerText = `${Math.floor(intTimeLeft/60).toString().padStart(2,'0')}:${(intTimeLeft%60).toString().padStart(2,'0')}`; }
+        function startIntTimer() {
+            if(!intIsRunning) {
+                intIsRunning=true; document.getElementById('int-btn').textContent="Stop Timer";
+                globalTimerInterval = setInterval(() => { intTimeLeft--; updateIntTimer(); if(intTimeLeft<=0){ clearInterval(globalTimerInterval); intIsRunning=false; document.getElementById('int-timer-display').innerText="TIME UP"; document.getElementById('int-timer-display').classList.add('animate-shake'); document.getElementById('int-btn').textContent="Reset"; } }, 1000);
+            } else { clearInterval(globalTimerInterval); intIsRunning=false; document.getElementById('int-btn').textContent="Start Interrogation"; intTimeLeft=120; updateIntTimer(); document.getElementById('int-timer-display').classList.remove('animate-shake'); }
         }
 
-        function updateDictScoreboard() {
-            document.getElementById('dict-team1-score').innerText = dictTeam1Score;
-            document.getElementById('dict-team2-score').innerText = dictTeam2Score;
-        }
+        // ==========================================
+        // GAME 7: TWO TRUTHS, ONE LIE
+        // ==========================================
+        const ttPrompts = ["Things you did last weekend", "Your hidden talents/skills", "Things you've eaten", "Places you've visited", "Fears you have"];
+        function generateTruthPrompt() { document.getElementById('tt-prompt').textContent = `"${ttPrompts[Math.floor(Math.random()*ttPrompts.length)]}"`; }
 
+        // ==========================================
+        // GAME 8: RUNNING DICTATION
+        // ==========================================
+        let dictDeck = [], currentDictQuestion = null;
+        function initDictationGame() { dictTeam1Score=0; dictTeam2Score=0; updateDictScoreboard(); dictDeck = shuffleArray([...reporterData]); showView('dictation'); nextDictQuote(); }
+        function updateDictScore(team, amt) { team===1 ? dictTeam1Score=Math.max(0,dictTeam1Score+amt) : dictTeam2Score=Math.max(0,dictTeam2Score+amt); updateDictScoreboard(); }
+        function updateDictScoreboard() { document.getElementById('dict-team1-score').innerText = dictTeam1Score; document.getElementById('dict-team2-score').innerText = dictTeam2Score; }
         function nextDictQuote() {
-            const playArea = document.getElementById('dict-play-area');
-            playArea.classList.remove('animate-pop-in');
-            void playArea.offsetWidth; 
-            playArea.classList.add('animate-pop-in');
-
             document.getElementById('dict-answer-box').classList.add('hidden');
-
-            if (dictDeck.length === 0) {
-                dictDeck = shuffleArray([...reporterData]);
-            }
-
+            if (dictDeck.length === 0) dictDeck = shuffleArray([...reporterData]);
             currentDictQuestion = dictDeck.pop();
-            
             document.getElementById('dict-quote').textContent = currentDictQuestion.quote;
+            document.getElementById('dict-sentence').textContent = currentDictQuestion.sentence.replace('_________', currentDictQuestion.answer);
+        }
+        function toggleDictAnswer() { document.getElementById('dict-answer-box').classList.toggle('hidden'); }
+
+        // ==========================================
+        // GAME 9: DEFUSE THE BOMB
+        // ==========================================
+        let bombStage = 0, bombTimeLeft = 60, currentBombQ = null, bDeck = [];
+        function initDefuse() {
+            bombStage = 0; bombTimeLeft = 60; bDeck = shuffleArray([...bombQuestions]); showView('defuse'); nextBombStage();
+            globalTimerInterval = setInterval(() => {
+                bombTimeLeft -= 0.1;
+                document.getElementById('bomb-timer').textContent = Math.max(0, bombTimeLeft).toFixed(1);
+                if (bombTimeLeft <= 0) { clearInterval(globalTimerInterval); endGame("BOOM! The bomb exploded."); }
+            }, 100);
+        }
+        function nextBombStage() {
+            bombStage++;
+            if (bombStage > 5) { clearInterval(globalTimerInterval); score = Math.floor(bombTimeLeft * 10); endGame("Bomb Defused! You survived."); return; }
+            document.getElementById('bomb-stage').textContent = `Stage ${bombStage} of 5`;
+            currentBombQ = bDeck.pop();
+            document.getElementById('bomb-question').textContent = currentBombQ.q;
             
-            const filledSentence = currentDictQuestion.sentence.replace('_________', currentDictQuestion.answer);
-            document.getElementById('dict-sentence').textContent = filledSentence;
+            const wires = shuffleArray([{w: currentBombQ.a, c:true}, {w: currentBombQ.w1, c:false}, {w: currentBombQ.w2, c:false}]);
+            const colors = shuffleArray(["bg-red-500 hover:bg-red-400", "bg-blue-500 hover:bg-blue-400", "bg-emerald-500 hover:bg-emerald-400"]);
+            const container = document.getElementById('bomb-wires'); container.innerHTML = '';
+            
+            wires.forEach((wire, i) => {
+                const btn = document.createElement('button');
+                btn.className = `${colors[i]} text-white font-bold py-3 rounded-lg w-full transition shadow-[0_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 uppercase tracking-widest`;
+                btn.textContent = wire.w;
+                btn.onclick = () => {
+                    if(wire.c) { nextBombStage(); } 
+                    else { 
+                        bombTimeLeft -= 10; document.getElementById('bomb-container').classList.add('animate-shake'); document.getElementById('bomb-timer').classList.add('text-yellow-400');
+                        setTimeout(() => { document.getElementById('bomb-container').classList.remove('animate-shake'); document.getElementById('bomb-timer').classList.remove('text-yellow-400'); }, 500);
+                        if(bombTimeLeft <= 0) { clearInterval(globalTimerInterval); endGame("BOOM! Wrong wire."); }
+                    }
+                };
+                container.appendChild(btn);
+            });
         }
 
-        function toggleDictAnswer() {
-            const answerBox = document.getElementById('dict-answer-box');
-            if (answerBox.classList.contains('hidden')) {
-                answerBox.classList.remove('hidden');
-            } else {
-                answerBox.classList.add('hidden');
+        // ==========================================
+        // GAME 10: SPACE RACE
+        // ==========================================
+        let posUsa = 0, posUssr = 0, spaceDeck = [];
+        function initSpaceRace() {
+            posUsa = 0; posUssr = 0; updateRockets();
+            let allQ = []; jeopardyCategories.forEach(c => c.questions.forEach(q => allQ.push(q)));
+            spaceDeck = shuffleArray(allQ); showView('spacerace');
+        }
+        function moveRocket(team, amt) {
+            if(team==='usa') posUsa = Math.max(0, Math.min(10, posUsa + amt)); else posUssr = Math.max(0, Math.min(10, posUssr + amt));
+            updateRockets();
+        }
+        function updateRockets() {
+            document.getElementById('sr-usa').style.left = `${posUsa * 9}%`; document.getElementById('sr-ussr').style.left = `${posUssr * 9}%`;
+            if(posUsa === 10) setTimeout(()=>endGame("USA wins the Space Race!"), 500); else if(posUssr === 10) setTimeout(()=>endGame("USSR wins the Space Race!"), 500);
+        }
+        function drawSpaceCard() {
+            if(spaceDeck.length === 0) return;
+            const q = spaceDeck.pop();
+            document.getElementById('space-q-text').textContent = q.q; document.getElementById('space-a-text').textContent = q.a;
+            document.getElementById('space-a-text').classList.add('hidden'); document.getElementById('space-modal').classList.remove('hidden');
+        }
+
+        // ==========================================
+        // GAME 11: JEOPARDY!
+        // ==========================================
+        let jeopScoreA = 0, jeopScoreB = 0, currentJeopValue = 0, currentJeopCell = null;
+        function initJeopardy() {
+            jeopScoreA = 0; jeopScoreB = 0; document.getElementById('jeop-score-a').textContent = 0; document.getElementById('jeop-score-b').textContent = 0;
+            const board = document.getElementById('jeopardy-board'); board.innerHTML = '';
+            
+            // Headers
+            jeopardyCategories.forEach(cat => {
+                board.innerHTML += `<div class="bg-blue-800 text-yellow-400 font-display text-lg text-center py-4 px-2 uppercase shadow-inner border-b-4 border-blue-900 leading-tight flex items-center justify-center h-20">${cat.name}</div>`;
+            });
+            // 4 Rows
+            for(let row=0; row<4; row++) {
+                jeopardyCategories.forEach((cat, colIdx) => {
+                    const val = (row+1)*100;
+                    const cell = document.createElement('div');
+                    cell.className = "bg-blue-600 hover:bg-blue-500 text-yellow-300 font-display text-4xl text-center py-6 cursor-pointer border-b-4 border-blue-800 transition active:translate-y-1 active:border-b-0";
+                    cell.textContent = val;
+                    cell.onclick = () => openJeopardyQ(cat.name, cat.questions[row], val, cell);
+                    board.appendChild(cell);
+                });
             }
+            showView('jeopardy');
+        }
+        function openJeopardyQ(catName, qObj, val, cellElement) {
+            if(cellElement.classList.contains('opacity-0')) return; // Already answered
+            currentJeopValue = val; currentJeopCell = cellElement;
+            document.getElementById('jeop-cat-val').textContent = `${catName} for ${val}`;
+            document.getElementById('jeop-q-text').textContent = qObj.q;
+            document.getElementById('jeop-a-text').textContent = qObj.a;
+            document.getElementById('jeop-answer-area').classList.add('hidden');
+            document.getElementById('jeop-reveal-btn').classList.remove('hidden');
+            document.getElementById('jeop-modal').classList.remove('hidden');
+        }
+        function awardJeopardy(team) {
+            if(team===1) { jeopScoreA += currentJeopValue; document.getElementById('jeop-score-a').textContent = jeopScoreA; }
+            if(team===2) { jeopScoreB += currentJeopValue; document.getElementById('jeop-score-b').textContent = jeopScoreB; }
+            currentJeopCell.classList.add('opacity-0', 'cursor-default'); currentJeopCell.classList.remove('hover:bg-blue-500', 'active:translate-y-1');
+            document.getElementById('jeop-modal').classList.add('hidden');
+            
+            // Check if all cells empty (Win condition)
+            const allCells = document.getElementById('jeopardy-board').children;
+            let finished = true;
+            for(let i=5; i<allCells.length; i++) { if(!allCells[i].classList.contains('opacity-0')) finished = false; }
+            if(finished) { score = Math.max(jeopScoreA, jeopScoreB); setTimeout(()=>endGame(`Game Over! A: ${jeopScoreA} | B: ${jeopScoreB}`), 1000); }
         }
 
     </script>
