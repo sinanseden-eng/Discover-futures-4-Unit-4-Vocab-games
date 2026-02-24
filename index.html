@@ -215,6 +215,12 @@
                     <div class="text-xl font-display text-purple-400" id="sc-progress">Word 1 of 5</div>
                 </div>
 
+                <!-- ADD SCRAMBLER TIMER HERE -->
+                <div class="timer-bar-container max-w-lg mx-auto mb-2">
+                    <div id="sc-timer-bar" class="timer-bar" style="width: 100%;"></div>
+                </div>
+                <div class="text-center text-xs font-bold text-slate-400 mb-8 tracking-widest uppercase">Time Left: <span id="sc-time-text" class="text-white">60</span>s</div>
+
                 <div id="sc-play-area" class="animate-pop-in text-center flex flex-col items-center">
                     <div class="bg-indigo-900/50 border border-indigo-500/30 p-6 rounded-2xl w-full mb-10 shadow-inner">
                         <span class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-2 block">Decode this definition</span>
@@ -232,7 +238,9 @@
                     </div>
 
                     <div class="flex gap-4 mt-8 w-full justify-center">
-                        <button onclick="scramblerClear()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-xl transition">Clear</button>
+                        <button onclick="scramblerHint()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#b45309] active:translate-y-1 active:shadow-none text-sm md:text-base">💡 Hint</button>
+                        <button onclick="scramblerClear()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-xl transition shadow-[0_3px_0_#334155] active:translate-y-1 active:shadow-none text-sm md:text-base">Clear</button>
+                        <button onclick="scramblerReveal(true)" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-[0_3px_0_#9f1239] active:translate-y-1 active:shadow-none text-sm md:text-base">👁️ Reveal</button>
                     </div>
                 </div>
             </div>
@@ -293,6 +301,15 @@
                         <strong>Teacher Scoring Guide:</strong><br>
                         Use 1 Word = +10 pts | Use 2 Words = +20 pts | Use All 3 = +30 pts<br>
                         <em>Grammar penalty = -5 pts</em>
+                    </div>
+
+                    <!-- ADD EXAMPLE SENTENCE REVEAL -->
+                    <div class="mb-8 max-w-2xl mx-auto">
+                        <button onclick="toggleSentenceExample()" class="text-sm font-bold text-slate-400 hover:text-white underline transition mb-3">Teacher: Show Example Sentence</button>
+                        <div id="sn-example-box" class="hidden bg-indigo-900/40 border border-indigo-500/50 p-5 rounded-xl shadow-inner">
+                            <p class="text-indigo-300 font-bold text-xs uppercase tracking-widest mb-2">Example:</p>
+                            <p id="sn-example-text" class="text-white text-lg font-serif italic"></p>
+                        </div>
                     </div>
 
                     <button onclick="nextSentenceWords()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-display text-xl py-4 px-10 rounded-full shadow-[0_5px_0_#b45309] active:shadow-[0_0px_0_#b45309] active:translate-y-1 transition-all">
@@ -510,14 +527,14 @@
 
         // --- SENTENCE GROUPS (Game 3) ---
         const sentenceGroups = [
-            ["rivalry", "opponent", "outperform"],
-            ["interspecies", "coexist", "adapt"],
-            ["invasive", "extinction", "battleground"],
-            ["anxiety", "underperform", "catalyst"],
-            ["cooperate", "transparent", "secrecy"],
-            ["intraspecies", "emigrate", "coexist"],
-            ["opponent", "anxiety", "underperform"],
-            ["adapt", "invasive", "cooperate"]
+            { words: ["rivalry", "opponent", "outperform"], example: "The intense rivalry forced the athlete to outperform his opponent." },
+            { words: ["interspecies", "coexist", "adapt"], example: "To coexist peacefully, interspecies groups must adapt to each other's needs." },
+            { words: ["invasive", "extinction", "battleground"], example: "The forest became a battleground when the invasive species pushed native plants toward extinction." },
+            { words: ["anxiety", "underperform", "catalyst"], example: "The coach's harsh words were a catalyst for anxiety, causing the team to underperform." },
+            { words: ["cooperate", "transparent", "secrecy"], example: "If we want to cooperate, we must be transparent and avoid unnecessary secrecy." },
+            { words: ["intraspecies", "emigrate", "coexist"], example: "Intraspecies competition for food forced the wolves to either emigrate or learn to coexist." },
+            { words: ["opponent", "anxiety", "underperform"], example: "Her anxiety about facing a stronger opponent caused her to underperform in the final match." },
+            { words: ["adapt", "invasive", "cooperate"], example: "Native animals must cooperate and adapt quickly when an invasive predator arrives." }
         ];
 
         // --- MASSIVE REPORTER'S RUSH DATA (Game 4) ---
@@ -629,6 +646,7 @@
             if (viewId === 'dashboard') {
                 clearInterval(srTimer);
                 if (typeof snTimerInterval !== 'undefined') clearInterval(snTimerInterval);
+                if (typeof scTimerInterval !== 'undefined') clearInterval(scTimerInterval);
             }
         }
 
@@ -759,6 +777,8 @@
         let scTargetWord = '';
         let scCurrentAttempt = [];
         let scStartTime = 0;
+        let scTimerInterval;
+        let scTimeLeft = 60;
 
         function initScrambler() {
             score = 0;
@@ -805,7 +825,30 @@
             void playArea.offsetWidth; 
             playArea.classList.add('animate-pop-in');
 
+            // Setup Scrambler Timer
+            clearInterval(scTimerInterval);
+            scTimeLeft = 60;
+            updateScTimerUI();
+            scTimerInterval = setInterval(() => {
+                scTimeLeft--;
+                updateScTimerUI();
+                if (scTimeLeft <= 0) {
+                    clearInterval(scTimerInterval);
+                    scramblerReveal(false); // Time out reveal
+                }
+            }, 1000);
+
             renderScramblerUI();
+        }
+
+        function updateScTimerUI() {
+            document.getElementById('sc-time-text').textContent = scTimeLeft;
+            const bar = document.getElementById('sc-timer-bar');
+            bar.style.width = `${(scTimeLeft / 60) * 100}%`;
+            
+            bar.classList.remove('timer-warning', 'timer-danger');
+            if (scTimeLeft <= 20) bar.classList.add('timer-warning');
+            if (scTimeLeft <= 10) bar.classList.add('timer-danger');
         }
 
         function renderScramblerUI() {
@@ -867,10 +910,44 @@
             renderScramblerUI();
         }
 
+        function scramblerHint() {
+            // Find the first empty or incorrect slot and fill it with correct letter
+            for (let i = 0; i < scTargetWord.length; i++) {
+                if (scCurrentAttempt[i] !== scTargetWord[i]) {
+                    scCurrentAttempt[i] = scTargetWord[i];
+                    break;
+                }
+            }
+            score = Math.max(0, score - 5); // Small penalty for using a hint
+            renderScramblerUI();
+        }
+
+        function scramblerReveal(manual = true) {
+            clearInterval(scTimerInterval);
+            scCurrentAttempt = scTargetWord.split('');
+            renderScramblerUI();
+            
+            // Highlight slots as revealed (red outline)
+            const slots = document.getElementById('sc-target-slots').children;
+            for(let s of slots) {
+                s.style.background = "linear-gradient(to bottom right, #ef4444, #b91c1c)";
+                s.style.borderColor = "#fca5a5";
+                s.style.boxShadow = "0 4px 0 #7f1d1d";
+            }
+            
+            if (manual) score = Math.max(0, score - 15); // Penalty for giving up
+            
+            setTimeout(() => {
+                scCurrentIndex++;
+                loadScrambleLevel();
+            }, 1500);
+        }
+
         function checkScrambleWin() {
             if (!scCurrentAttempt.includes(null)) {
                 const guess = scCurrentAttempt.join('');
                 if (guess === scTargetWord) {
+                    clearInterval(scTimerInterval); // Stop timer on win
                     score += 50; 
                     const slots = document.getElementById('sc-target-slots').children;
                     for(let s of slots) {
@@ -932,7 +1009,7 @@
             
             container.innerHTML = '';
             
-            group.forEach((word, i) => {
+            group.words.forEach((word, i) => {
                 const colors = [
                     "from-teal-400 to-emerald-600 border-emerald-300", 
                     "from-fuchsia-400 to-purple-600 border-purple-300", 
@@ -946,6 +1023,19 @@
                     </div>
                 `;
             });
+
+            // Hide example text when generating new words
+            document.getElementById('sn-example-box').classList.add('hidden');
+            document.getElementById('sn-example-text').textContent = group.example;
+        }
+
+        function toggleSentenceExample() {
+            const box = document.getElementById('sn-example-box');
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
         }
 
         function updateSnTimerDisplay() {
